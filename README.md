@@ -1,0 +1,81 @@
+# Nexus
+
+A personal system for tasks, notes, links, projects, study and focus, all connected. Your data stays in your browser (localStorage and IndexedDB). No server, no account.
+
+**Ask Nexus** has two modes. *Find* runs on your device with no account or key (priorities, overdue, search). *Ask with AI* is optional and uses your own Anthropic API key; nothing is sent unless you press it.
+
+## What is in this folder
+
+| File | Purpose |
+| --- | --- |
+| `index.html` | The whole app (UI and logic) |
+| `patch.js` | Second layer loaded after the app: backups with attachments, encrypted API key, Ask Nexus actions, file reading |
+| `ai.js` | Free AI router: tries your Gemini, Groq, OpenRouter, Mistral and Cerebras keys in order and moves on when a limit is hit |
+| `safety.js` | Safety net, loaded first in `<head>`: 30-day trash, automatic restore points, damaged-data recovery, an IndexedDB safe copy of every save. Shown in Settings > Safety net |
+| `dates.js` | Smarter task dates: weekdays, "in 3 days", "every Monday", a few Hindi and Telugu words |
+| `palette.js` | Command palette (Ctrl+K), `/` to search, `c` to capture |
+| `tests/`, `package.json` | `npm test` boots the real app in a simulated browser and checks the safety net, dates and palette. Runs on every push (`.github/workflows/test.yml`) |
+| `capture.js` | Capture sheet (note, task, link, idea, photo, video, audio, file), numbered names, quick-note mode, notification shortcut, floating note, error guards |
+| `offline.html`, `error.html`, `404.html` | Offline page, error page (`?code=503` and so on) and not-found page |
+| `safety.js` | Safety net: trash (30 days), automatic restore points, and a second copy of your data in IndexedDB. Loads first, in the head |
+| `dates.js` | Smarter dates in the capture box: "friday", "next monday", "in 3 days", "every monday", plus a few Hindi and Telugu words |
+| `palette.js` | Command palette: Ctrl+K (or Cmd+K) anywhere, "/" for search, "c" for Capture |
+| `plan.js` | Time: start time and length for tasks, the Plan screen (drag a task onto the day, drag its edge to resize), phone calendar beside your tasks, the shrinking disc in Focus, and "at 5pm" / "in 2 hours" / "for 45 min" phrases |
+| `phone.js` | Dictation button, the home-screen widget list, and task reminders handed to Android alarms (browser notifications when there is no Android app) |
+| `tests/` | Browser tests (`npm test`). They run on every push in `.github/workflows/test.yml` |
+| `features.js` | Files, recap, command center, study chapters, project details, repeating tasks, links, app lock, encrypted backups, appearance |
+| `theme.css` | The graphite theme (monochrome, matches the logo; loaded after the app's own CSS) |
+| `native.js` | Android app bridge: imports notes, recordings and screenshots from the floating bubble, bubble switch in Settings, saves backups to Downloads |
+| `sw.js` | Offline support and notification taps |
+| `android/` | Source for the Android app (a web view around this app plus the floating bubble) |
+| `.github/workflows/android.yml` | Builds the Android app on GitHub and publishes it as the latest release |
+| `manifest.webmanifest`, `icons/` | Makes it installable. `icons/logo.svg` is the mark, `icons/favicon.svg` follows the system theme |
+| `privacy.html`, `terms.html`, `404.html` | Static pages |
+
+File names are case-sensitive on GitHub Pages. Keep them exactly as above.
+
+## Put it on GitHub Pages
+1. Upload everything in this folder to the repo root (delete any old copies first).
+2. Repo Settings > Pages > Source: "Deploy from a branch" > Branch: `main`, folder `/ (root)` > Save.
+3. After a minute your app is live at `https://YOUR-USERNAME.github.io/nexus-v3/`.
+
+## Install on your phone
+Open that URL in Chrome on Android, then menu > Install app (or Add to Home screen). On iPhone use Safari > Share > Add to Home Screen.
+
+## Updating
+Edit the files, then bump `VERSION` in `sw.js` (for example `nexus-v6-2`) so installed copies refresh.
+
+## Android app with the floating bubble
+A web page cannot float over other apps, so the Android app does it natively. It bundles this whole app, works offline, and adds a small bubble you can tap from any app to write a note. Notes wait in a local inbox and appear in Nexus the next time you open it, tagged `bubble`.
+
+1. Every time you change the web files or `android/`, GitHub builds the app (Actions tab > Build Android app). You can also run it by hand with "Run workflow".
+2. Download `nexus.apk` from the Releases page on your phone and open it. Android asks once to allow installs from your browser.
+3. In the app: Settings > Floating bubble > Allow and turn on, then switch on "Display over other apps" for Nexus.
+4. Tap the bubble for a panel with a note box, **Record voice** and **Screenshot**. A recording shows a red dot on the bubble until you stop it.
+
+**Recording** needs the microphone permission, which Android asks for the first time you tap Record. **Screenshots** need Android's screen capture permission: tap Screenshot, allow it, and on Android 14 and newer choose **Entire screen** (choosing a single app only captures that app). While screenshots are ready, Android shows its normal screen-capture icon in the status bar. The bubble hides itself for a moment so it is not in the picture. Recordings and screenshots wait in the inbox and appear in Nexus as voice and photo items tagged `bubble`.
+
+The app is signed with the key in `android/debug.keystore`, which is public. That is fine for a personal app you install yourself, and it lets new versions install over old ones. It is not suitable for the Play Store. The app has its own storage, separate from the browser: use Export backup in one and Restore backup in the other to move your items.
+
+To build it yourself: `sudo apt-get install -y openjdk-21-jdk-headless aapt apksigner zipalign dalvik-exchange` and run `android/build.sh`.
+
+### Widget, quick add, shortcuts and reminders (Android app)
+
+- **Home-screen widget.** Long-press the home screen, choose Widgets, then Nexus. It shows your next tasks with a tick for each, and a **+ Add** button. Ticks are applied the next time Nexus opens.
+- **Quick add.** The widget's **+ Add**, the **Quick note** tile in the notification shade (edit the tiles to add it) and the **Quick add** launcher shortcut (long-press the app icon) all open a small box that also works over the lock screen. Words like "tomorrow at 5pm" are understood when Nexus next opens.
+- **Plan day** is a second launcher shortcut that opens the Plan screen.
+- **Reminders.** A task with a start time rings at that time with a **Done** button, even when Nexus is closed. Android may deliver one a few minutes late to save battery; Nexus uses inexact alarms on purpose so no special permission is needed. Reminders are put back after a restart or an update.
+- **Dictation.** In Capture, **Dictate** opens Android's speech screen (English, Hindi or Telugu). Which languages work depends on the speech service on your phone.
+- **Calendar.** On the Plan screen, **Allow calendar** shows events from your phone's calendars next to your tasks. Nexus only reads them on the phone and never saves them.
+
+## Plan your day
+
+Tasks can have a start time and a length. Give a task a time by typing "call Sam tomorrow at 5pm for 20 min", in the task editor, or on the Plan screen (Tasks tab > **Plan your day**, the command palette, or the **Plan day** shortcut). On Plan, drag a task from **To place** onto the day; on a phone, press and hold first so a swipe still scrolls. Or tap a task and then tap a time. Drag the bottom edge of a block to change its length; tap a block for exact times, Focus and Done.
+
+## One copy per site
+Every repo you publish on the same GitHub account shares one browser origin, so storage is now kept separately per copy (by its URL path). If you rename the repo or move it, export a backup first. Settings > Delete all data also clears leftovers from older copies.
+
+## Backup
+Your data lives only in that browser. Use Settings > Export backup now and then. Backups include attachments, so they can be large, and they are not encrypted.
+
+See `ROADMAP.md` for what is built and what is still planned.

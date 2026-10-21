@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_desc">Your next tasks, a tick for each, and a quick add button.</string>
+    <string name="sc_quick_short">Quick add</string>
+    <string name="sc_quick_long">Quick add a note or task</string>
+    <string name="sc_plan_short">Plan day</string>
+    <string name="sc_plan_long">Plan your day</string>
+    <string name="tile_label">Quick note</string>
+</resources>
