@@ -1,10 +1,9 @@
 import {boot,newBrowser} from './harness.mjs';
 import assert from 'node:assert/strict';
+import {t,state} from './lib.mjs';
 
-let pass=0,fail=0;const failed=[];
-async function t(name,fn){try{await fn();pass++;console.log('  ok   '+name)}catch(e){fail++;failed.push(name);console.log('  FAIL '+name+'\n       '+String(e&&e.message||e).split('\n')[0])}}
 const add=(p,o={})=>p.ev(`addItem(${JSON.stringify({type:'task',title:'x',body:'',url:'',tags:[],project:null,due:null,promise:false,...o})}).id`);
-const K='nexus.v2/';
+const K='nexus.data/';
 
 console.log('Boot');
 await t('app starts with every script and no script errors',async()=>{
@@ -26,7 +25,7 @@ await t('deleting a project, a subject and a single card are all recoverable',as
   const br=newBrowser(),p=await boot(br);
   p.ev(`D.projects.push({id:'p1',name:'Thesis'});D.study.push({id:'s1',name:'Physics',cards:[{id:'c1',q:'F?',a:'ma',box:0,due:'2026-01-01'},{id:'c2',q:'E?',a:'mc2',box:0,due:'2026-01-01'}]});D.study.push({id:'s2',name:'Maths',cards:[]});save()`);await p.flush();
   p.ev(`D.projects=[];D.study[0].cards=D.study[0].cards.filter(c=>c.id!=='c1');D.study=D.study.filter(s=>s.id!=='s2');save()`);await p.flush();
-  const tr=await p.w.NXSafe.trash();assert.deepEqual(tr.map(e=>e.kind).sort(),['card','project','subject']);
+  const tr=await p.w.NXSafe.trash();assert.deepEqual([...tr.map(e=>e.kind)].sort(),['card','project','subject']);
   for(const e of tr)await p.w.NXSafe.restoreEntry(e);
   assert.equal(p.ev('D.projects.length'),1);assert.equal(p.ev('D.study.length'),2);assert.equal(p.ev('D.study.find(s=>s.id==="s1").cards.length'),2);p.close()});
 await t('delete-all collapses into one batch entry and a restore point is saved first',async()=>{
@@ -421,7 +420,7 @@ await t('5,000 items: loads, deletes one, and restores it quickly',async()=>{
 console.log('Portability (Markdown export and importers)');
 const F=(name,text)=>({name,size:text.length,text:async()=>text});
 async function unzipNames(p,blob){
-  const buf=await new Promise(r=>{const fr=new p.w.FileReader();fr.onload=()=>r(new Uint8Array(fr.result));fr.readAsArrayBuffer(blob)});
+  const buf=blob.arrayBuffer?new Uint8Array(await blob.arrayBuffer()):await new Promise(r=>{const fr=new p.w.FileReader();fr.onload=()=>r(new Uint8Array(fr.result));fr.readAsArrayBuffer(blob)});
   const dv=new DataView(buf.buffer),dec=new TextDecoder(),out={};
   let e=buf.length-22;assert.equal(dv.getUint32(e,true),0x06054b50,'end of zip record');
   const n=dv.getUint16(e+10,true);let o=dv.getUint32(e+16,true);
@@ -488,5 +487,8 @@ await t('Settings shows the Markdown export and import buttons once',async()=>{
   p.ev('A.settings()');assert.ok(p.w.document.querySelector('#xmd'));assert.ok(p.w.document.querySelector('#imp'));
   p.ev('A.settings()');assert.equal(p.w.document.querySelectorAll('#xmd').length,1);assert.deepEqual(errors,[]);p.close()});
 
-console.log(`\n${pass} passed, ${fail} failed`);
-if(fail){console.log('Failed: '+failed.join('; '));process.exit(1)}
+await import('./vault.mjs');
+await import('./sync.mjs');
+
+console.log(`\n${state.pass} passed, ${state.fail} failed`);
+if(state.fail){console.log('Failed: '+state.failed.join('; '));process.exit(1)}

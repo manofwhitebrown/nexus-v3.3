@@ -8,7 +8,7 @@ cd "$(dirname "$0")"
 ROOT=..
 B=build
 VERSION_CODE="${VERSION_CODE:-$(date +%y%m%d%H)}"
-VERSION_NAME="${VERSION_NAME:-1.0.$VERSION_CODE}"
+VERSION_NAME="${VERSION_NAME:-3.3.$VERSION_CODE}"
 JAR="${ANDROID_JAR:-$HOME/.cache/nexus/android-34.jar}"
 
 if [ ! -s "$JAR" ]; then

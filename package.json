@@ -1,5 +1,6 @@
 {
   "name": "nexus-tests",
+  "version": "3.3.0",
   "private": true,
   "type": "module",
   "scripts": { "test": "node tests/run.mjs" },

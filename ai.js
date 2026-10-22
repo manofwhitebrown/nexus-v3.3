@@ -4,7 +4,7 @@
    Cerebras) and moves to the next model or provider when one hits a limit or fails.
    Keys are the user's own, stored only in this browser. Nothing is bundled in the repository. */
 (()=>{
-const MARK='__nexus_multi__',LS='nexus.ai.v1',CL='nexus.ai.cool';
+const MARK='__nexus_multi__',LS='nexus.ai.v1'+NS,CL='nexus.ai.cool';
 const PROV={
   gemini:{name:'Google Gemini',get:'https://aistudio.google.com/apikey',kind:'gemini',base:'https://generativelanguage.googleapis.com/v1beta',models:['gemini-flash-latest','gemini-flash-lite-latest'],vision:true},
   groq:{name:'Groq',get:'https://console.groq.com/keys',kind:'oai',base:'https://api.groq.com/openai/v1',models:['llama-3.3-70b-versatile','llama-3.1-8b-instant']},

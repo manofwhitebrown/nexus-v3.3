@@ -20,10 +20,10 @@ Status: done, partial, not started.
 | 14 Personalization | partial | Dark, light, match phone; four accents; three text sizes | Wallpaper, layouts, navigation style |
 | 15 The Nexus (connections) | done | Automatic related items plus links you make, with backlinks | Graph view |
 | 16 Smart collections | done | Unfinished, overdue, saved, ideas, this week, untouched, study material, recently studied, exam material | Custom rules |
-| 17 Privacy | partial | Local-first, PIN lock, encrypted backups, backup reminders, delete-all | Encryption at rest, sync |
+| 17 Privacy | done | Local-first, PIN lock, encrypted backups, backup reminders, delete-all that wipes everything (vault, trash, restore points, attachments), **encryption at rest** with a recovery key, **sync** through a folder or your own Dropbox with end-to-end encryption, merge a backup file | Sync through Google Drive, background sync when the app is closed |
 | 18 Tech foundation         | partial | Installable PWA, offline, shortcuts, share target, Android app with floating bubble, widget, quick-settings tile, native reminders, calendar and speech bridges | Launcher mode, sync |
 
-The PIN lock keeps casual snoopers out. It does not encrypt what is stored in the browser.
+The PIN lock keeps casual snoopers out and does not encrypt anything. Encryption at rest (Settings > Encryption) does.
 
 ## Status against the four phases (October 2026)
 
@@ -36,15 +36,15 @@ The PIN lock keeps casual snoopers out. It does not encrypt what is stored in th
 
 ## Status against the build plan (October 2026)
 
-Written for what the code does, not what has been tried on a phone. **None of the Android parts have been run on a device yet.** They compile, package and sign, and the web side is covered by 67 browser tests.
+Written for what the code does, not what has been tried on a phone. The Android parts were tried on a phone by the author before Phase 4; Phase 4 has not been tried on a phone yet. The web side is covered by the browser tests (`npm test`).
 
 | Phase | Status |
 |---|---|
-| 0. Make it unbreakable | Done in code: trash and undo for everything (30 days), automatic restore points, a second copy in IndexedDB, damaged-data recovery, a 5,000-item test, **Export as Markdown (zip: Tasks.md, Notes/, Study/)**, **import from Todoist (.csv), Google Keep (.json), Evernote (.enex) and Obsidian or Notion (.md files)**, a restore point before every import, and the 67 browser tests now run on every push and before every APK build. **Not done:** Notion and Obsidian *zip* files (unzip first and pick the .md files), Evernote and Keep attachments. |
+| 0. Make it unbreakable | Done in code: trash and undo for everything (30 days), automatic restore points, a second copy in IndexedDB, damaged-data recovery, a 5,000-item test, **Export as Markdown (zip: Tasks.md, Notes/, Study/)**, **import from Todoist (.csv), Google Keep (.json), Evernote (.enex) and Obsidian or Notion (.md files)**, a restore point before every import, and the browser tests now run on every push and before every APK build. **Not done:** Notion and Obsidian *zip* files (unzip first and pick the .md files), Evernote and Keep attachments. |
 | 1. Fastest capture on Android | Done in code: widget with quick add and tick-off, quick-settings tile, lock-screen quick add, launcher shortcuts, dictation, smarter dates, calm overdue (no red), command palette. Not done: transcription of recorded voice notes, Hindi and Telugu in more date phrases. |
 | 2. Time | Done in code: phone calendar beside tasks, time-blocking by dragging, shrinking-disc timer, reminders as Android alarms. Not done: reminders for tasks with a date but no time, a week view. |
 | 3. Study and quiet intelligence | Done in code: **FSRS-5 scheduling** (Again/Hard/Good/Easy with the next gap shown, old cards converted, memory kept through backup), **cards made from notes** by rules (you review and tick them first), **smarter search** (word forms, close synonyms, typos, partial matches), **auto-tags** from tags and subjects you already use, shorter titles for long one-line notes, a gentle "looks similar" warning, and a **daily study plan** that spreads new cards over the days before an exam (20 new cards a day when no exam is set). Honest limits: search is rules and a small synonym list, not a neural model, so it will not find "car" from "automobile" unless listed; cards from notes need clear patterns like "Term: meaning" or "X is …"; no AI card-making button beyond Ask Nexus. |
-| 4. Sync and encryption | Not started. |
+| 4. Sync and encryption | Done in code: encryption at rest for the data, safe copy, trash, restore points, attachments and keys, with an unlock screen, recovery key, change of passphrase, auto-lock and safe turn-on/turn-off; sync through a folder or Dropbox with a field-level merge, sealed attachments and conflict retry; merge a backup file. Tested with simulated devices, a simulated folder and a simulated Dropbox. **Not yet tried against the real Dropbox or the Android app with encryption on.** Not done: Google Drive, background sync. |
 | 5. Launch | Not started. |
 
 ## What a web app cannot do

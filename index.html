@@ -2,7 +2,8 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nexus: tasks, notes and projects</title>
-<script src="safety.js"></script>
+<script src="vault.js"></script>
+<script type="text/nx-defer" data-src="safety.js"></script>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0D0D0E">
 <meta name="mobile-web-app-capable" content="yes">
@@ -72,9 +73,9 @@ a{color:var(--lk)}
 <button class="fab" data-a="cap">Capture</button>
 <nav aria-label="Main"><div id="nv"></div></nav>
 <dialog id="dlg"></dialog><div id="toast" role="status"></div><div id="fx" role="dialog" aria-label="Focus mode"></div>
-<script>
+<script type="text/nx-defer">
 const $=s=>document.querySelector(s),E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const NS=location.pathname.replace(/[^\/]*$/,''),K='nexus.v2'+NS;let D={items:[],projects:[],log:[],study:[]},S={tab:'home',skip:0,pj:null,col:null,type:'auto'};
+const NS=location.pathname.replace(/[^\/]*$/,''),K='nexus.data'+NS,APP_VERSION='3.3.0';let D={items:[],projects:[],log:[],study:[]},S={tab:'home',skip:0,pj:null,col:null,type:'auto'};
 let OK=0;try{const r=JSON.parse(localStorage.getItem(K)||'{}');if(r&&typeof r==='object')D={items:Array.isArray(r.items)?r.items:[],projects:Array.isArray(r.projects)?r.projects:[],log:Array.isArray(r.log)?r.log:[],study:Array.isArray(r.study)?r.study:[]};OK=1}catch(e){}
 const LB=D.log.length;{const ids=new Set(D.items.map(x=>x.id));D.log=D.log.filter(l=>ids.has(l.id))}
 const TH='nexus.theme'+NS,th=()=>{try{return localStorage.getItem(TH)||'dark'}catch(e){return'dark'}};
@@ -181,7 +182,7 @@ $('#ty').onclick=e=>{const b=e.target.closest('[data-t]');if(b){sv();const p={ty
 $('#edl').onclick=()=>{const c={...it},lg=D.log.filter(l=>l.id===i);D.items=D.items.filter(x=>x.id!==i);D.log=D.log.filter(l=>l.id!==i);save();dlg.close();setTimeout(()=>{try{window.gcMedia&&window.gcMedia()}catch(e){}},8000);toast('Deleted','Undo',()=>{D.items.push(c);D.log.push(...lg);D.log.sort((a,b)=>a.t<b.t?-1:1);save();render()})}}
 function settings(){const t=th()==='light'?'light':'dark';sheet(`<div style="display:flex;justify-content:space-between"><h2 style="margin:0">Settings</h2><button class="btn" id="sx">Close</button></div><h2>Theme</h2><div class="chips" id="th">${[['dark','Dark'],['light','Light']].map(([k,l])=>`<button class="chip" data-t="${k}" aria-pressed="${t===k}">${l}</button>`).join('')}</div>
 <h2>Reminders</h2><p class="mu" id="rmt"></p><div class="row2"><button class="btn p" id="rn">Turn on reminders</button></div><h2>Backup</h2><p class="mu">Your data lives only in this browser. Export a file now and then.</p><div class="row2"><button class="btn p" id="xp">Export backup</button><button class="btn" id="im">Restore from file</button></div><input type="file" id="fi" accept=".json,application/json" hidden>
-<h2>Storage</h2><p class="mu">${D.items.length} items, ${D.projects.length} projects, about ${Math.max(1,Math.round(JSON.stringify(D).length/1024))} KB of roughly 5 MB.</p><h2>Delete everything</h2><div class="row2"><button class="btn d" id="wp">Delete all data</button></div>`);
+<h2>Storage</h2><p class="mu">${D.items.length} items, ${D.projects.length} projects, about ${Math.max(1,Math.round(JSON.stringify(D).length/1024))} KB of roughly 5 MB.</p><h2>Delete everything</h2><div class="row2"><button class="btn d" id="wp">Delete all data</button></div><p class="mu" style="margin-top:20px">Nexus ${APP_VERSION}</p>`);
 $('#sx').onclick=()=>dlg.close();{const st=()=>{const p='Notification' in window?Notification.permission:'none';$('#rmt').textContent=p==='granted'?'On. Nexus alerts you each morning about tasks due, and when a focus session ends. This works while Nexus is open or running in the background. A browser can pause it. In the Android app, tasks with a start time ring even when Nexus is closed.':p==='denied'?'Blocked. Allow notifications for this site in your browser settings.':p==='none'?'This browser does not support notifications.':'Get a morning alert for tasks due today and a ping when focus ends.';$('#rn').hidden=p!=='default'};st();$('#rn').onclick=async()=>{try{await Notification.requestPermission()}catch(e){}st();checkDue()}}$('#th').onclick=e=>{const b=e.target.closest('[data-t]');if(b){try{localStorage.setItem(TH,b.dataset.t)}catch(x){}applyTh();settings()}};
 $('#xp').onclick=()=>{const u=URL.createObjectURL(new Blob([JSON.stringify({app:'nexus',v:2,...D},null,1)],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download='nexus-backup-'+dk()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('Backup exported')};
 $('#im').onclick=()=>$('#fi').click();$('#fi').onchange=async e=>{const f=e.target.files[0];if(!f)return;if(f.size>5e6){toast('File too large for a Nexus backup.');return}try{const r=JSON.parse(await f.text());if(r.app!=='nexus'||!Array.isArray(r.items))throw 0;
@@ -207,9 +208,13 @@ clrlog:()=>{if(confirm('Clear the timeline? Your items are not deleted.')){D.log
 delp:i=>{const p=D.projects.find(x=>x.id===i);if(confirm('Delete '+p.name+'? Its items stay in Nexus without a project.')){D.projects=D.projects.filter(x=>x.id!==i);D.items.forEach(x=>{if(x.project===i)x.project=null});S.pj=null;save();render();toast('Project deleted')}}};
 
 let PM=null,rec=null;
-const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open('nexus-media'+NS,1);r.onupgradeneeded=()=>r.result.createObjectStore('b');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
-const bput=async(k,b)=>{const d=await idb();return new Promise((res,rej)=>{const t=d.transaction('b','readwrite');t.objectStore('b').put(b,k);t.oncomplete=res;t.onerror=()=>rej(t.error)})};
-const bget=async k=>{const d=await idb();return new Promise((res,rej)=>{const q=d.transaction('b').objectStore('b').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})};
+let IDBP=null;
+const idb=()=>IDBP||(IDBP=new Promise((res,rej)=>{const r=indexedDB.open('nexus-media'+NS,1);r.onupgradeneeded=()=>r.result.createObjectStore('b');r.onsuccess=()=>{r.result.onversionchange=()=>{r.result.close();IDBP=null};res(r.result)};r.onerror=()=>{IDBP=null;rej(r.error)}}));
+const bput=async(k,b)=>{const v=window.NXVault?await NXVault.rec.seal('media',b):b,d=await idb();return new Promise((res,rej)=>{const t=d.transaction('b','readwrite');t.objectStore('b').put(v,k);t.oncomplete=res;t.onerror=()=>rej(t.error)})};
+const bget=async k=>{const d=await idb(),r=await new Promise((res,rej)=>{const q=d.transaction('b').objectStore('b').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)});return window.NXVault&&r?NXVault.rec.open('media',r):r};
+if(window.NXVault)NXVault.addMigrator('attachments',async dir=>{const d=await idb(),keys=await new Promise((res,rej)=>{const q=d.transaction('b').objectStore('b').getAllKeys();q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)});
+  for(const k of keys){const r=await new Promise((res,rej)=>{const q=d.transaction('b').objectStore('b').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)});const n=dir==='seal'?await NXVault.rec.seal('media',r):await NXVault.rec.open('media',r);
+    if(n!==r)await new Promise((res,rej)=>{const t=d.transaction('b','readwrite');t.objectStore('b').put(n,k);t.oncomplete=res;t.onerror=()=>rej(t.error)})}});
 async function shrink(f){try{const b=await createImageBitmap(f),s=Math.min(1,1280/Math.max(b.width,b.height)),c=document.createElement('canvas');c.width=Math.round(b.width*s);c.height=Math.round(b.height*s);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(b,0,0,c.width,c.height);return await new Promise(r=>c.toBlob(x=>r(x||f),'image/jpeg',.82))}catch(e){return f}}
 function mediaUI(cb){const info=$('#mi');const set=async(blob,kind,name)=>{if(blob.size>8e6){info.textContent='That file is over 8 MB.';return}try{const id=uid();await bput(id,blob);cb({id,kind,name:String(name).slice(0,80),mime:blob.type});info.textContent='Attached '+kind+': '+name}catch(e){info.textContent='Could not store that file on this device.'}};
 const pick=(accept,kind)=>{const f=document.createElement('input');f.type='file';f.accept=accept;f.onchange=async()=>{let x=f.files[0];if(!x)return;const nm=x.name||kind;if(kind==='photo'&&x.type.startsWith('image/'))x=await shrink(x);set(x,kind,nm)};f.click()};
@@ -245,18 +250,19 @@ const f=v.match(/^focus\s*(\d{1,3})?\b\s*(.*)$/i);if(f){const T=D.items.filter(i
 const pv=parse(v),r=search(v);if(pv&&(/^(task|todo|idea|note|remind)\b/i.test(v)||pv.url||(!r.it.length&&!r.pr.length))){const it=addItem(pv);if(it){e.target.value='';render();toast('Saved as '+it.type)}}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&F)stopF()});
 render();
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+if('serviceWorker' in navigator){const reg=()=>navigator.serviceWorker.register('sw.js').catch(()=>{});document.readyState==='complete'?reg():addEventListener('load',reg)}
 </script>
-<script src="ai.js"></script>
-<script src="patch.js"></script>
-<script src="capture.js"></script>
-<script src="features.js"></script>
-<script src="dates.js"></script>
-<script src="palette.js"></script>
-<script src="plan.js"></script>
-<script src="phone.js"></script>
-<script src="native.js"></script>
-<script src="portability.js"></script>
-<script src="study.js"></script>
-<script src="smart.js"></script>
+<script type="text/nx-defer" data-src="ai.js"></script>
+<script type="text/nx-defer" data-src="patch.js"></script>
+<script type="text/nx-defer" data-src="capture.js"></script>
+<script type="text/nx-defer" data-src="features.js"></script>
+<script type="text/nx-defer" data-src="dates.js"></script>
+<script type="text/nx-defer" data-src="palette.js"></script>
+<script type="text/nx-defer" data-src="plan.js"></script>
+<script type="text/nx-defer" data-src="phone.js"></script>
+<script type="text/nx-defer" data-src="native.js"></script>
+<script type="text/nx-defer" data-src="portability.js"></script>
+<script type="text/nx-defer" data-src="study.js"></script>
+<script type="text/nx-defer" data-src="smart.js"></script>
+<script type="text/nx-defer" data-src="sync.js"></script>
 </body></html>

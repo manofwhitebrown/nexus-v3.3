@@ -1,6 +1,6 @@
-# Nexus
+# Nexus 3.3
 
-A personal system for tasks, notes, links, projects, study and focus, all connected. Your data stays in your browser (localStorage and IndexedDB). No server, no account.
+A personal system for tasks, notes, links, projects, study and focus, all connected. Your data stays on your device (localStorage and IndexedDB), optionally encrypted with a passphrase. No server, no account.
 
 **Ask Nexus** has two modes. *Find* runs on your device with no account or key (priorities, overdue, search). *Ask with AI* is optional and uses your own Anthropic API key; nothing is sent unless you press it.
 
@@ -10,16 +10,18 @@ A personal system for tasks, notes, links, projects, study and focus, all connec
 | --- | --- |
 | `index.html` | The whole app (UI and logic) |
 | `patch.js` | Second layer loaded after the app: backups with attachments, encrypted API key, Ask Nexus actions, file reading |
+| `vault.js` | Loads first, in `<head>`. Optional encryption at rest (passphrase, recovery key, unlock screen), and the loader that starts every other script only after unlock. Shown in Settings > Encryption |
+| `safety.js` | Safety net, loads right after the vault: 30-day trash, automatic restore points, damaged-data recovery, an IndexedDB safe copy of every save. Everything it stores is sealed when encryption is on. Shown in Settings > Safety net |
+| `sync.js` | Sync between devices with no server: an encrypted sync file in a folder or your own Dropbox, a merge that keeps edits from both sides, and Merge a backup file. Shown in Settings > Sync |
+| `portability.js` | Export as Markdown, and import from Notion, Evernote, Keep, Obsidian and Todoist |
+| `study.js` | FSRS-5 spaced repetition for flashcards |
+| `smart.js` | Search that forgives typos, cards made from notes, automatic tags, the daily study plan |
+| `tests/`, `package.json` | `npm test` boots the real app in a simulated browser and checks the safety net, encryption, sync, dates, study and the rest. Runs on every push (`.github/workflows/test.yml`) |
 | `ai.js` | Free AI router: tries your Gemini, Groq, OpenRouter, Mistral and Cerebras keys in order and moves on when a limit is hit |
-| `safety.js` | Safety net, loaded first in `<head>`: 30-day trash, automatic restore points, damaged-data recovery, an IndexedDB safe copy of every save. Shown in Settings > Safety net |
 | `dates.js` | Smarter task dates: weekdays, "in 3 days", "every Monday", a few Hindi and Telugu words |
 | `palette.js` | Command palette (Ctrl+K), `/` to search, `c` to capture |
-| `tests/`, `package.json` | `npm test` boots the real app in a simulated browser and checks the safety net, dates and palette. Runs on every push (`.github/workflows/test.yml`) |
 | `capture.js` | Capture sheet (note, task, link, idea, photo, video, audio, file), numbered names, quick-note mode, notification shortcut, floating note, error guards |
 | `offline.html`, `error.html`, `404.html` | Offline page, error page (`?code=503` and so on) and not-found page |
-| `safety.js` | Safety net: trash (30 days), automatic restore points, and a second copy of your data in IndexedDB. Loads first, in the head |
-| `dates.js` | Smarter dates in the capture box: "friday", "next monday", "in 3 days", "every monday", plus a few Hindi and Telugu words |
-| `palette.js` | Command palette: Ctrl+K (or Cmd+K) anywhere, "/" for search, "c" for Capture |
 | `plan.js` | Time: start time and length for tasks, the Plan screen (drag a task onto the day, drag its edge to resize), phone calendar beside your tasks, the shrinking disc in Focus, and "at 5pm" / "in 2 hours" / "for 45 min" phrases |
 | `phone.js` | Dictation button, the home-screen widget list, and task reminders handed to Android alarms (browser notifications when there is no Android app) |
 | `tests/` | Browser tests (`npm test`). They run on every push in `.github/workflows/test.yml` |
@@ -37,13 +39,13 @@ File names are case-sensitive on GitHub Pages. Keep them exactly as above.
 ## Put it on GitHub Pages
 1. Upload everything in this folder to the repo root (delete any old copies first).
 2. Repo Settings > Pages > Source: "Deploy from a branch" > Branch: `main`, folder `/ (root)` > Save.
-3. After a minute your app is live at `https://YOUR-USERNAME.github.io/nexus-v3/`.
+3. After a minute your app is live at `https://YOUR-USERNAME.github.io/nexus-v3.3/`.
 
 ## Install on your phone
 Open that URL in Chrome on Android, then menu > Install app (or Add to Home screen). On iPhone use Safari > Share > Add to Home Screen.
 
 ## Updating
-Edit the files, then bump `VERSION` in `sw.js` (for example `nexus-v6-2`) so installed copies refresh.
+Edit the files, then bump `VERSION` in `sw.js` (for example `nexus-3.3.1`) so installed copies refresh.
 
 ## Android app with the floating bubble
 A web page cannot float over other apps, so the Android app does it natively. It bundles this whole app, works offline, and adds a small bubble you can tap from any app to write a note. Notes wait in a local inbox and appear in Nexus the next time you open it, tagged `bubble`.
@@ -76,6 +78,16 @@ Tasks can have a start time and a length. Give a task a time by typing "call Sam
 Every repo you publish on the same GitHub account shares one browser origin, so storage is now kept separately per copy (by its URL path). If you rename the repo or move it, export a backup first. Settings > Delete all data also clears leftovers from older copies.
 
 ## Backup
-Your data lives only in that browser. Use Settings > Export backup now and then. Backups include attachments, so they can be large, and they are not encrypted.
+Your data lives on that device unless you turn on sync. Use Settings > Export backup now and then. Backups include attachments, so they can be large. **Export backup** is plain; **Export encrypted backup** asks for a passphrase. To combine a backup with what is already on a device, use Settings > Sync > **Merge a backup file**. It adds and never replaces.
+
+## Encryption and sync
+
+**Encryption at rest** (Settings > Encryption). Turn it on and Nexus asks for a passphrase every time it opens or locks. Your data, attachments, trash, restore points, saved API keys and sync settings are encrypted on the device with AES-GCM; the key is made from your passphrase with PBKDF2 (600,000 rounds). You get a one-time **recovery key**. If you lose both the passphrase and the recovery key, nothing can bring the data back, including the safe copy. Turning it on or off moves existing data safely and resumes if interrupted. It protects against someone reading the browser's storage, not against malware on an unlocked phone. The Android widget, reminders and quick-add inbox hand task text to Android outside this lock.
+
+**Sync** (Settings > Sync, needs encryption on). Choose a folder (Chrome or Edge on a computer; the folder can live inside Dropbox, Drive, OneDrive or Syncthing) or your own Dropbox. Nexus writes one encrypted file plus one per attachment, sealed with a key made from a *sync passphrase* you choose; use the same one on every device. Edits to different parts of the same note on two devices are both kept, a deletion travels only if the other device did not touch the item, and anything removed by sync is in the trash for 30 days. Automatic sync runs when you open Nexus and about 20 seconds after you stop changing things.
+
+Dropbox needs a free app of your own: create one at dropbox.com/developers/apps with **App folder** access and the `files.content.read` and `files.content.write` permissions, add your Nexus address as a redirect URI, and paste the App key in Nexus. Phones cannot pick a folder from the browser, and the Android app has no Dropbox sign-in (its address cannot be registered); on those, use Dropbox in the browser or installed web app, or combine devices with **Merge a backup file**, or use Nexus in the browser or as an installed web app.
+
+Limits: encryption makes the stored data about a third larger, so the roughly 5 MB browser limit is reached sooner. If storage fills, Nexus keeps a safe copy and asks you to export.
 
 See `ROADMAP.md` for what is built and what is still planned.

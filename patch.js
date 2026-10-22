@@ -1,4 +1,4 @@
-/* Nexus patch v3.0 - load after the main script in index.html */
+/* Nexus patch - load after the main script in index.html */
 (()=>{
 const B64=b=>{const u=new Uint8Array(b);let s='';for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(s)};
 const U8=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -45,9 +45,8 @@ const oldSettings=settings;
 settings=function(){oldSettings();const x=$('#xp');if(!x)return;
 x.onclick=async()=>{x.disabled=true;toast('Preparing backup with attachments...');try{await exportAll();toast('Backup exported')}catch(e){toast('Export failed. Try again.')}x.disabled=false};
 $('#fi').onchange=async e=>{const f=e.target.files[0];if(f)await restoreAll(f)};storageInfo();
-$('#wp').onclick=async()=>{if(!confirm('Delete everything Nexus has stored in this browser, including leftovers from older copies of Nexus on this site? This cannot be undone.'))return;D={items:[],projects:[],log:[],study:[]};save();
-try{const d=await idb();await new Promise((res,rej)=>{const t=d.transaction('b','readwrite');t.objectStore('b').clear();t.oncomplete=res;t.onerror=()=>rej(t.error)})}catch(e){}
-try{for(const k of [LK,EK,NK,TH,'nexus.hi'+NS,'nexus.v2','nexus.theme','nexus.notif','nexus.key','nexus.keyenc'])localStorage.removeItem(k)}catch(e){}try{indexedDB.deleteDatabase('nexus-media')}catch(e){}SK='';dlg.close();toast('Everything deleted')}};
+$('#wp').onclick=async()=>{if(!confirm('Delete everything Nexus has stored on this device, including the trash, restore points, attachments, encryption and sync settings? This cannot be undone. Cloud copies are not touched.'))return;
+try{await NXVault.wipeAll()}catch(e){}SK='';dlg.close();location.reload()}};
 A.settings=settings;
 
 /* 3. Ask the browser not to evict our data */
