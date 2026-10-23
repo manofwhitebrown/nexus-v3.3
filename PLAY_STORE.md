@@ -1,0 +1,91 @@
+# Play Store hand-off for Nexus
+
+Everything here is a draft written from the code and `privacy.html` at version 3.4.0. Google's forms and policies change, so read each answer against the Play Console wording before you submit. Items marked **CHECK** are ones I could not verify from the code.
+
+## 1. Listing text
+
+**App name** (30 characters max): `Nexus: Tasks, Notes, Study` (26)
+
+**Short description** (80 max): `Private tasks, notes and flashcards. Works offline. No account.` (63)
+
+**Full description** (4,000 max):
+
+> Nexus keeps your tasks, notes and study cards in one calm place. Everything stays on your phone. There is no account, no server and no tracking.
+>
+> SAVE ANYTHING IN THREE SECONDS
+> Tap Capture and type. Words like "tomorrow", #tags and @project sort it for you. Use the floating bubble, the home-screen widget, the quick-settings tile or the lock-screen shortcut to jot something down from any app.
+>
+> PLAN WITHOUT GUILT
+> Home shows the one thing to do now, then what comes next. A task you miss stays in your list. It is never shown in red.
+>
+> STUDY FROM YOUR OWN NOTES
+> Turn notes into flashcards. Nexus brings each card back just before you would forget it.
+>
+> YOURS, AND SAFE
+> A 30-day trash and automatic restore points protect you from mistakes. Lock and encrypt everything with a passphrase. Export to Markdown or JSON, and import from Todoist, Google Keep, Evernote, Obsidian and Notion.
+>
+> OPTIONAL SYNC
+> Sync between your devices through a folder you choose or your own Dropbox. Files are encrypted on your device before they leave it.
+>
+> IN YOUR LANGUAGE
+> English, हिन्दी and తెలుగు.
+>
+> NO ADS. NO ACCOUNT. NO PAYWALL ON THE BASICS.
+
+**CHECK:** "No paywall" and any price you plan (see the money decision in the research plan) must match what you actually ship.
+
+**Category:** Productivity. **Tags:** to-do list, notes, flashcards.
+
+**Contact email:** required by Play and not in the repo. `privacy.html` only points to GitHub issues. Add a real email address.
+
+**Privacy policy URL:** the hosted address of `privacy.html`.
+
+## 2. Data safety form (draft answers)
+
+| Question | Answer | Why |
+|---|---|---|
+| Does the app collect or share user data? | Collects none on its own servers. See notes below. | The privacy page says nothing is sent to the developer and there are no analytics. |
+| Is all data encrypted in transit? | Yes | Cleartext traffic is off in the manifest (`usesCleartextTraffic=false`). |
+| Can users request data deletion? | Yes, in the app | Settings has delete-all. Data never leaves the device unless the user turns on sync or AI. |
+| Analytics, ads, tracking | None | Confirmed by the privacy page. |
+
+**Notes to decide before answering.** Optional features send data to third parties only when the user turns them on and supplies their own key or account:
+
+- Ask Nexus with AI: question and matching notes go to the provider the user chose (Anthropic, Gemini, Groq, OpenRouter, Mistral, Cerebras).
+- Read with AI: one photo or PDF goes to Anthropic.
+- Sync: encrypted files go to the user's own Dropbox or chosen folder.
+
+Whether these count as "sharing" on the form depends on Google's definitions, which exempt some user-initiated transfers. **CHECK** the current definitions. If in doubt, declare them and describe them as optional and user-initiated.
+
+## 3. Permissions and the justification for each
+
+| Permission | Used for | Where in code |
+|---|---|---|
+| `SYSTEM_ALERT_WINDOW` | Draws the floating note bubble, only while the user has switched it on | `BubbleService` |
+| `FOREGROUND_SERVICE` + `_SPECIAL_USE` | Keeps the bubble alive. Declared subtype: "Floating note bubble drawn over other apps so the user can jot notes" | `BubbleService`, manifest property |
+| `FOREGROUND_SERVICE_MICROPHONE` + `RECORD_AUDIO` | Records a voice note when the user taps Record. The service only takes this type while recording | `BubbleService.startRecording` |
+| `FOREGROUND_SERVICE_MEDIA_PROJECTION` | One screenshot when the user taps Screenshot. Android shows its own prompt each time | `BubbleService.startProjection` |
+| `POST_NOTIFICATIONS` | Task reminders and the bubble's notification | `Reminders`, `BubbleService` |
+| `RECEIVE_BOOT_COMPLETED` | Puts reminders and the bubble back after a restart | `BootReceiver` |
+| `READ_CALENDAR` | Shows the phone calendar beside tasks, read only, never copied off the device | `MainActivity` (CalendarContract) |
+| `INTERNET` | Optional sync, AI providers and links the user opens | web layer |
+| `MODIFY_AUDIO_SETTINGS` | **CHECK: I found no use of it in the Java code.** If nothing needs it, remove it from the manifest. Unused permissions invite review questions |  none found |
+
+**Likely review friction.** The overlay, screen-capture and microphone foreground-service types are the permissions Play reviewers look at hardest. Be ready with:
+
+- A short screen recording that shows each feature being switched on by the user, the system prompt, and the user stopping it.
+- The special-use declaration text above, entered in the Play Console foreground-service form.
+- A clear statement that screen capture happens only on tap, one frame at a time, and nothing records in the background.
+
+I expect extra scrutiny here, but that is my understanding of how review works, not something I checked against current policy.
+
+## 4. Release checklist (what only you can do)
+
+1. **Release keystore.** Generate your own and keep it and its passwords out of the repo. The repo currently signs with a committed debug keystore (`android/debug.keystore`, password `android`). Never upload a build signed with that to Play. With Play App Signing, the key you sign with is only your upload key, but you still need to protect it.
+2. **AAB build.** Play needs an `.aab`. `android/build.sh` produces an `.apk` with `aapt` and cannot make an AAB. This is item 4 and is not done.
+3. **Target API.** `build.sh` targets API 36. **CHECK** the current minimum target level in the Play Console before upload.
+4. **Content rating** questionnaire, and the **target audience** (not for children).
+5. **Screenshots** (phone, at least two), a 512×512 icon (`icons/icon-512.png` exists), and a 1024×500 feature graphic.
+6. **Translations.** Have a native speaker review `i18n-data.js` for Hindi and Telugu before you advertise those languages. The store listing in each language also needs translating.
+7. **Real-phone testing** of the bubble, widget, tile, reminders, calendar and boot behaviour on at least two Android versions.
+8. **Known bug to fix first:** the flaky attachment test (an attachment can vanish after a lock and unlock in about 6% of runs). Do not ship until it is understood.
