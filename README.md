@@ -52,7 +52,7 @@ File names are case-sensitive on GitHub Pages. Keep them exactly as above.
 Open that URL in Chrome on Android, then menu > Install app (or Add to Home screen). On iPhone use Safari > Share > Add to Home Screen.
 
 ## Updating
-Edit the files, then bump `VERSION` in `sw.js` (for example `nexus-3.3.1`) so installed copies refresh.
+Edit the files, then bump `VERSION` in `sw.js` (for example `nexus-3.4.2`) so installed copies refresh.
 
 ## Android app with the floating bubble
 A web page cannot float over other apps, so the Android app does it natively. It bundles this whole app, works offline, and adds a small bubble you can tap from any app to write a note. Notes wait in a local inbox and appear in Nexus the next time you open it, tagged `bubble`.

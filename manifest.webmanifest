@@ -59,6 +59,11 @@
    "url": "./?a=ask"
   },
   {
+   "name": "Plan day",
+   "short_name": "Plan",
+   "url": "./?a=plan"
+  },
+  {
    "name": "Recap",
    "short_name": "Recap",
    "url": "./?a=recap"
