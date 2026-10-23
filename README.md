@@ -1,5 +1,7 @@
 # Nexus 3.3
 
+Made by Mohammed Abdul Nayeem.
+
 A personal system for tasks, notes, links, projects, study and focus, all connected. Your data stays on your device (localStorage and IndexedDB), optionally encrypted with a passphrase. No server, no account.
 
 **Ask Nexus** has two modes. *Find* runs on your device with no account or key (priorities, overdue, search). *Ask with AI* is optional and uses your own Anthropic API key; nothing is sent unless you press it.

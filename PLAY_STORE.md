@@ -36,6 +36,8 @@ Everything here is a draft written from the code and `privacy.html` at version 3
 
 **Category:** Productivity. **Tags:** to-do list, notes, flashcards.
 
+**Developer name:** Mohammed Abdul Nayeem (or the name on your Play Console account; Play shows that one).
+
 **Contact email:** required by Play and not in the repo. `privacy.html` only points to GitHub issues. Add a real email address.
 
 **Privacy policy URL:** the hosted address of `privacy.html`.
