@@ -6,4 +6,20 @@
     <string name="sc_plan_short">Plan day</string>
     <string name="sc_plan_long">Plan your day</string>
     <string name="tile_label">Quick note</string>
+    <string name="app_name">Nexus</string>
+    <string name="quick_add">Quick add</string>
+    <string name="quick_add_hint">e.g. call Sam tomorrow at 5pm</string>
+    <string name="cancel">Cancel</string>
+    <string name="save_note">Save note</string>
+    <string name="save_task">Save task</string>
+    <string name="reminders_channel">Task reminders</string>
+    <string name="done">Done</string>
+    <string name="widget_title">Next up</string>
+    <string name="widget_add">+ Add</string>
+    <string name="widget_empty">Nothing to do right now</string>
+    <string name="capture_unsupported">This phone does not allow screen capture.</string>
+    <string name="mic_allowed">Microphone allowed. Tap Record again.</string>
+    <string name="capture_failed">Screen capture could not start.</string>
+    <string name="capture_denied">Screen capture was not allowed.</string>
+    <string name="mic_off">The microphone is off for Nexus. Turn it on in Android settings to record.</string>
 </resources>

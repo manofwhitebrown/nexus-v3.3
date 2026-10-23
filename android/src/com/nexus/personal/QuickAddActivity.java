@@ -33,13 +33,13 @@ public class QuickAddActivity extends Activity {
         root.setPadding(p, p, p, p);
 
         TextView h = new TextView(this);
-        h.setText("Quick add");
+        h.setText(R.string.quick_add);
         h.setTextSize(20);
         h.setTextColor(0xFFECECEA);
         root.addView(h);
 
         box = new EditText(this);
-        box.setHint("e.g. call Sam tomorrow at 5pm");
+        box.setHint(R.string.quick_add_hint);
         box.setHintTextColor(0xFF9A9A9F);
         box.setTextColor(0xFFECECEA);
         box.setMinLines(3);
@@ -51,9 +51,9 @@ public class QuickAddActivity extends Activity {
 
         LinearLayout row = new LinearLayout(this);
         row.setGravity(Gravity.END);
-        row.addView(button("Cancel", "", false));
-        row.addView(button("Save note", "note", false));
-        row.addView(button("Save task", "task", true));
+        row.addView(button(getString(R.string.cancel), "", false));
+        row.addView(button(getString(R.string.save_note), "note", false));
+        row.addView(button(getString(R.string.save_task), "task", true));
         root.addView(row);
 
         setContentView(root);

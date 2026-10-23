@@ -27,7 +27,7 @@ public class ReminderReceiver extends BroadcastReceiver {
         NotificationManager nm = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
         if (nm == null) return;
         if (Build.VERSION.SDK_INT >= 26) {
-            nm.createNotificationChannel(new NotificationChannel(CHANNEL, "Task reminders",
+            nm.createNotificationChannel(new NotificationChannel(CHANNEL, c.getString(R.string.reminders_channel),
                     NotificationManager.IMPORTANCE_DEFAULT));
         }
         int nid = id.hashCode();
@@ -42,7 +42,7 @@ public class ReminderReceiver extends BroadcastReceiver {
                 .setContentText(body == null ? "" : body)
                 .setContentIntent(open)
                 .setAutoCancel(true)
-                .addAction(0, "Done", PendingIntent.getBroadcast(c, nid, done, flags));
+                .addAction(0, c.getString(R.string.done), PendingIntent.getBroadcast(c, nid, done, flags));
         nm.notify(nid, b.build());
     }
 }

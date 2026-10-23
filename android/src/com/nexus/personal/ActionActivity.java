@@ -34,7 +34,7 @@ public class ActionActivity extends Activity {
                 startActivityForResult(m.createScreenCaptureIntent(), REQ_PROJECTION);
             } catch (Exception e) {
                 BubbleService.shotPending = false;
-                Toast.makeText(this, "This phone does not allow screen capture.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.capture_unsupported), Toast.LENGTH_LONG).show();
                 finish();
             }
         } else {
@@ -47,8 +47,8 @@ public class ActionActivity extends Activity {
         super.onRequestPermissionsResult(code, perms, res);
         if (code == REQ_MIC) {
             boolean ok = res.length > 0 && res[0] == PackageManager.PERMISSION_GRANTED;
-            Toast.makeText(this, ok ? "Microphone allowed. Tap Record again."
-                    : "The microphone is off for Nexus. Turn it on in Android settings to record.",
+            Toast.makeText(this, ok ? getString(R.string.mic_allowed)
+                    : getString(R.string.mic_off),
                     Toast.LENGTH_LONG).show();
         }
         finish();
@@ -68,11 +68,11 @@ public class ActionActivity extends Activity {
                     else startService(s);
                 } catch (Exception e) {
                     BubbleService.shotPending = false;
-                    Toast.makeText(this, "Screen capture could not start.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.capture_failed), Toast.LENGTH_LONG).show();
                 }
             } else {
                 BubbleService.shotPending = false;
-                Toast.makeText(this, "Screen capture was not allowed.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.capture_denied), Toast.LENGTH_SHORT).show();
             }
         }
         finish();

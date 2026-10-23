@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_desc">आपके अगले कार्य, हर एक के लिए टिक, और त्वरित जोड़ने का बटन।</string>
+    <string name="sc_quick_short">त्वरित जोड़ें</string>
+    <string name="sc_quick_long">नोट या कार्य जोड़ें</string>
+    <string name="sc_plan_short">दिन प्लान</string>
+    <string name="sc_plan_long">अपना दिन प्लान करें</string>
+    <string name="tile_label">त्वरित नोट</string>
+    <string name="app_name">Nexus</string>
+    <string name="quick_add">त्वरित जोड़ें</string>
+    <string name="quick_add_hint">जैसे: call Sam tomorrow at 5pm</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="save_note">नोट सहेजें</string>
+    <string name="save_task">कार्य सहेजें</string>
+    <string name="reminders_channel">कार्य अनुस्मारक</string>
+    <string name="done">पूरा</string>
+    <string name="widget_title">आगे</string>
+    <string name="widget_add">+ जोड़ें</string>
+    <string name="widget_empty">अभी करने को कुछ नहीं</string>
+    <string name="capture_unsupported">यह फ़ोन स्क्रीन कैप्चर की अनुमति नहीं देता।</string>
+    <string name="mic_allowed">माइक्रोफ़ोन की अनुमति मिल गई। फिर से रिकॉर्ड दबाएँ।</string>
+    <string name="capture_failed">स्क्रीन कैप्चर शुरू नहीं हो सका।</string>
+    <string name="capture_denied">स्क्रीन कैप्चर की अनुमति नहीं दी गई।</string>
+    <string name="mic_off">Nexus के लिए माइक्रोफ़ोन बंद है। रिकॉर्ड करने के लिए इसे Android सेटिंग्स में चालू करें।</string>
+</resources>

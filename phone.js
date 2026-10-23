@@ -41,9 +41,10 @@ dlg.addEventListener('close',()=>{if(REC){try{REC.stop()}catch(e){}}});
 
 /* ---------- 2. widget list and 3. reminders ---------- */
 const wk=k=>new Date(k+'T12:00').toLocaleDateString(undefined,{weekday:'short'});
+const L10=s=>window.NXI18N?window.NXI18N.t(s):s;   /* the widget follows the language chosen in Nexus */
 const label=t=>{const td=dk(),s=T.slot(t),tm=s?T.fmt(s.s):'';
-  if(t.due===td)return tm||'today';
-  if(t.due===addD(1))return 'tomorrow'+(tm?' '+tm:'');
+  if(t.due===td)return tm||L10('today');
+  if(t.due===addD(1))return L10('tomorrow')+(tm?' '+tm:'');
   if(t.due&&t.due>td)return wk(t.due)+(tm?' '+tm:'');
   return ''};   /* overdue tasks carry no label, so nothing on the widget shames you */
 const snapshot=()=>{const td=dk(),rk=t=>t.due&&t.due<td?0:t.due===td?1:t.promise?2:t.due?3:4;
