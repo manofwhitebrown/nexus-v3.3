@@ -1,5 +1,5 @@
-const SCOPE=self.registration.scope,VERSION='nexus-3.3.0|'+SCOPE;
-const SHELL=['./','index.html','ai.js','patch.js','capture.js','features.js','native.js','vault.js','safety.js','sync.js','dates.js','palette.js','plan.js','phone.js','portability.js','study.js','smart.js','theme.css','manifest.webmanifest','privacy.html','terms.html','404.html','offline.html','error.html','icons/favicon.svg','icons/logo.svg','icons/apple-touch-icon.png','icons/icon-192.png','icons/icon-512.png','icons/icon-maskable-512.png'];
+const SCOPE=self.registration.scope,VERSION='nexus-3.4.0|'+SCOPE;
+const SHELL=['./','index.html','ai.js','patch.js','capture.js','features.js','native.js','vault.js','safety.js','sync.js','dates.js','i18n.js','i18n-data.js','launch.js','fonts.css','palette.js','plan.js','phone.js','portability.js','study.js','smart.js','theme.css','manifest.webmanifest','privacy.html','terms.html','404.html','offline.html','error.html','icons/favicon.svg','icons/logo.svg','icons/apple-touch-icon.png','icons/icon-192.png','icons/icon-512.png','icons/icon-maskable-512.png','fonts/familjen-grotesk-latin-400.woff2','fonts/familjen-grotesk-latin-600.woff2','fonts/familjen-grotesk-latin-700.woff2'];
 
 self.addEventListener('install',e=>{
   /* cache:'reload' bypasses GitHub Pages' 10-minute HTTP cache so a new version never installs old files */
@@ -11,7 +11,7 @@ self.addEventListener('activate',e=>{
 });
 
 /* Same-origin files: serve the cached copy instantly, refresh it in the background.
-   Everything else (fonts, the Anthropic API) goes straight to the network. */
+   Everything else (the Anthropic API, the AI providers, Dropbox) goes straight to the network. The Hindi and Telugu fonts are cached the first time they are shown. */
 self.addEventListener('fetch',e=>{
   const r=e.request,u=new URL(r.url);
   if(r.method!=='GET'||u.origin!==location.origin)return;

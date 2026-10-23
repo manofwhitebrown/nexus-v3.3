@@ -286,6 +286,8 @@ public class MainActivity extends Activity {
         MIME.put("jpg", "image/jpeg");
         MIME.put("ico", "image/x-icon");
         MIME.put("txt", "text/plain");
+        MIME.put("woff2", "font/woff2");
+        MIME.put("woff", "font/woff");
     }
 
     private WebResourceResponse serve(String path) {

@@ -146,20 +146,16 @@ gc();render();
 
 /* 8. Structure for new people: plain names, a welcome, a get-started card, short tab descriptions */
 (()=>{
-const HK='nexus.hi'+NS,seen=()=>{try{return!!localStorage.getItem(HK)}catch(e){return true}},mark=()=>{try{localStorage.setItem(HK,'1')}catch(e){}};
 nav[2][1]='Library';nav[4][1]='More';
 const sub=(h,t,s)=>{const p='<p class="mu" style="margin:-6px 0 14px">'+s+'</p>',m=/<div style="display:flex;justify-content:space-between;align-items:center"><h1>[^<]*<\/h1>(<button[^>]*>[^<]*<\/button>)<\/div>/.exec(h);return m?h.replace(m[0],'<div class="hdr"><h1>'+t+'</h1>'+m[1]+'</div>'+p):h.replace(/<h1>[^<]*<\/h1>/,'<h1>'+t+'</h1>'+p)};
 const oT=tasks,oN=notes,oB=browse;
 tasks=function(){return sub(oT(),'Tasks','Things you need to do. Tick one off when it is done.')};
 notes=function(){return sub(oN(),'Library','Notes, saved links and ideas, all in one place. Search them from the top bar.')};
 browse=function(){const h=oB();return h.includes('<h1>Browse</h1>')?sub(h.replace('<h1>Browse</h1>','<h1>More</h1>'),'More','Projects, your timeline, and settings.'):h};
-const sample=()=>{const p={id:uid(),name:'Getting started'};D.projects.push(p);
-[['task','Try ticking this task off',0],['task','Add your own task with the plus button',1],['note','Notes live in the Library tab',0],['idea','Tap Ask Nexus on Home to find anything',0]].forEach(([t,ti,d])=>addItem({type:t,title:ti,body:'',url:'',tags:[],project:p.id,due:d?dk(new Date(Date.now()+864e5)):dk(),promise:false}));save();render()};
-function welcome(){sheet(`<h2 style="margin:0">Welcome to Nexus</h2><p class="mu">One place for what you need to do and what you want to remember. Everything stays on this phone.</p><ul style="padding:0;margin:14px 0"><li style="list-style:none;padding:10px 0;border-bottom:1px solid var(--ln)"><b style="display:block">Plus button</b><small>Saves a task, note, link, photo or voice note in seconds. Type "task call Sam tomorrow" and it files itself.</small></li><li style="list-style:none;padding:10px 0;border-bottom:1px solid var(--ln)"><b style="display:block">Home</b><small>Shows the one thing to do now, then what comes next.</small></li><li style="list-style:none;padding:10px 0;border-bottom:1px solid var(--ln)"><b style="display:block">Library</b><small>Your notes, links, ideas and files. Search them from the top bar.</small></li><li style="list-style:none;padding:10px 0;border-bottom:1px solid var(--ln)"><b style="display:block">Ask Nexus</b><small>Ask what to work on, or find anything you saved.</small></li></ul><div class="row2"><button class="btn p" id="wg">Start empty</button><button class="btn" id="ws">Add sample items</button></div>`);
-$('#wg').onclick=()=>{mark();dlg.close()};$('#ws').onclick=()=>{mark();dlg.close();sample()}}
-window.showWelcome=welcome;
+const tx=x=>window.NXI18N?NXI18N.t(x):x;   /* sample items are written in the chosen language */
+const sample=()=>{const p={id:uid(),name:tx('Getting started')};D.projects.push(p);
+[['task','Try ticking this task off',0],['task','Add your own task with the plus button',1],['note','Notes live in the Library tab',0],['idea','Tap Ask Nexus on Home to find anything',0]].forEach(([t,ti,d])=>addItem({type:t,title:tx(ti),body:'',url:'',tags:[],project:p.id,due:d?dk(new Date(Date.now()+864e5)):dk(),promise:false}));save();render()};
+window.nxSample=sample;   /* the first-run tour (launch.js) offers it */
 const oH=home;home=function(){let h=oH();if(D.items.length<3)h=h.replace(/(<\/p>)/,'$1<div class="card" style="cursor:default;margin:16px 0"><b>Get started</b><small>Three quick things to try.</small><div class="row2" style="margin-top:12px"><button class="btn p" data-a="cap">Add a task</button><button class="btn" data-a="askai">Try Ask Nexus</button><button class="btn" id="hw" data-a="welcome">How it works</button></div></div>');return h};
-A.welcome=welcome;
-const oS=settings;settings=function(){oS();const x=$('#sx');if(x&&!$('#hwb')){const b=document.createElement('button');b.className='btn';b.id='hwb';b.textContent='How Nexus works';b.style.marginTop='12px';b.onclick=welcome;x.closest('div').after(b)}};A.settings=settings;
-setTimeout(()=>{if(!seen()&&!D.items.length&&!D.projects.length)welcome()},400);
+const oS=settings;settings=function(){oS();const x=$('#sx');if(x&&!$('#hwb')){const b=document.createElement('button');b.className='btn';b.id='hwb';b.textContent='How Nexus works';b.style.marginTop='12px';b.onclick=()=>window.showWelcome&&window.showWelcome();x.closest('div').after(b)}};A.settings=settings;
 })();

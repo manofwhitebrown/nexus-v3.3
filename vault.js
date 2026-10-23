@@ -291,7 +291,7 @@ function showRecovery(key,first){
   $$('#nxv-done').onclick=back}
 
 /* ---------- 10. what other scripts use ---------- */
-const V=window.NXVault={version:'3.3.0',K,NS,ready,isOn,active,sealing,isSealed,rec,flush,migrators,
+const V=window.NXVault={version:'3.4.0',K,NS,ready,isOn,active,sealing,isSealed,rec,flush,migrators,
   addMigrator:(name,run)=>migrators.push({name,run}),
   seal:(s,c)=>seal(String(s),c),open:(s,c)=>open(s,c),sealBlob,openBlob,
   enable,disable,unlock,unlockRecovery,changePass,renewRecovery,setLock,lockNow,wipeAll,

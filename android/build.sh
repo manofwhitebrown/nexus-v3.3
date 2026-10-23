@@ -8,7 +8,7 @@ cd "$(dirname "$0")"
 ROOT=..
 B=build
 VERSION_CODE="${VERSION_CODE:-$(date +%y%m%d%H)}"
-VERSION_NAME="${VERSION_NAME:-3.3.$VERSION_CODE}"
+VERSION_NAME="${VERSION_NAME:-3.4.$VERSION_CODE}"
 JAR="${ANDROID_JAR:-$HOME/.cache/nexus/android-34.jar}"
 
 if [ ! -s "$JAR" ]; then
@@ -16,10 +16,11 @@ if [ ! -s "$JAR" ]; then
   curl -fsSL -o "$JAR" https://raw.githubusercontent.com/Sable/android-platforms/master/android-34/android.jar
 fi
 
-rm -rf "$B"; mkdir -p "$B/assets/icons" "$B/gen" "$B/classes" "$B/res"
+rm -rf "$B"; mkdir -p "$B/assets/icons" "$B/assets/fonts" "$B/gen" "$B/classes" "$B/res"
 # The whole web app is bundled, so Nexus works offline inside the Android app.
 cp "$ROOT"/*.html "$ROOT"/*.js "$ROOT"/*.css "$ROOT"/*.webmanifest "$B/assets/"
 cp "$ROOT"/icons/* "$B/assets/icons/"
+cp "$ROOT"/fonts/* "$B/assets/fonts/"
 cp -r res/* "$B/res/"
 for d in mdpi hdpi xhdpi xxhdpi; do mkdir -p "$B/res/mipmap-$d"; cp "$ROOT/icons/icon-192.png" "$B/res/mipmap-$d/ic_launcher.png"; done
 mkdir -p "$B/res/mipmap-xxxhdpi"; cp "$ROOT/icons/icon-512.png" "$B/res/mipmap-xxxhdpi/ic_launcher.png"

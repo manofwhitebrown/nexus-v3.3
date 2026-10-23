@@ -9,7 +9,7 @@
   --pa:#F6F6F4;--pb:#D4D4D1;
   --na:#2E2E32;--nb:#18181A;--nt:#F2F2F0;
   --r:8px;
-  --serif:"Familjen Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;
+  --serif:"Familjen Grotesk","Noto Sans Devanagari","Noto Sans Telugu",system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;
   color-scheme:dark}
 :root[data-theme="dark"]{
   --bg:#0D0D0E;--s:#161617;--ink:#ECECEA;--mu:#9A9A9F;--ln:rgba(255,255,255,.11);
@@ -179,3 +179,11 @@ main>.hdr,main>div[style*="space-between"]{margin:16px 0 4px}
 
 /* Calm overdue: no red for things that slipped. Errors keep their colour. */
 small.late{color:var(--mu)}
+
+/* Phase 5: skip link (visible only when a keyboard reaches it), Indic text needs a little more line height */
+#nx-skip{position:fixed;left:12px;top:-60px;z-index:100;padding:12px 16px;border-radius:var(--r);background:var(--ink);color:var(--bg);font-weight:600;text-decoration:none}
+#nx-skip:focus{top:calc(12px + env(safe-area-inset-top,0px))}
+html[lang=hi] body,html[lang=te] body{line-height:1.65}
+html[lang=hi] h1,html[lang=hi] h2,html[lang=te] h1,html[lang=te] h2{line-height:1.25;letter-spacing:0}
+html[lang=hi] nav button,html[lang=te] nav button{font-size:13px}
+#nx-th:focus,main h1:focus{outline:none}

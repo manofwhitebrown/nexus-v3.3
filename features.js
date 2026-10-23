@@ -100,7 +100,7 @@ const oCap=capture;capture=function(pj){oCap(pj);const mf=$('#mf');if(mf&&!$('#m
 const oParse=parse;parse=function(t,f){const p=oParse(t,f);if(p&&D.study.length){const s=String(t);D.study.forEach(sb=>{const sg=slug(sb.name);if(sg.length>2&&new RegExp('(^|[^\\p{L}\\p{N}])'+esc(sb.name)+'([^\\p{L}\\p{N}]|$)','iu').test(s)&&!p.tags.includes(sg)&&p.tags.length<10)p.tags.push(sg)})}return p};
 
 /* ---- Tasks that repeat, and links you make yourself ---- */
-const nextDue=(d,r)=>{const td=dk(),b=new Date((d&&d>td?d:td)+'T12:00');if(r==='daily')b.setDate(b.getDate()+1);else if(r==='weekly')b.setDate(b.getDate()+7);else b.setMonth(b.getMonth()+1);return dk(b)};
+const nextDue=(d,r)=>{const td=dk(),b=new Date((d&&d>td?d:td)+'T12:00');if(r==='daily')b.setDate(b.getDate()+1);else if(r==='weekly')b.setDate(b.getDate()+7);else return dk(addMo(b,1));return dk(b)};
 const oUpd=upd;upd=function(i,patch){const it=get(i),was=it&&it.done;oUpd(i,patch);if(it&&patch.done===true&&!was&&it.rep){const n=addItem({type:'task',title:it.title,body:it.body,url:it.url,tags:[...it.tags],project:it.project,due:nextDue(it.due,it.rep),promise:it.promise});if(n){n.rep=it.rep;save();toast('Repeats '+it.rep+', next one added')}}};
 const oRel=related;related=function(it){const ex=D.items.filter(o=>o.id!==it.id&&((it.links||[]).includes(o.id)||(o.links||[]).includes(it.id))).map(o=>({o,s:99,r:'Linked by you'}));return ex.concat(oRel(it).filter(x=>!ex.some(e=>e.o.id===x.o.id))).slice(0,8)};
 const oEdit=edit;edit=function(i){oEdit(i);const it=get(i);if(!it||!$('#edl'))return;
