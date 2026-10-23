@@ -72,13 +72,15 @@ function decorate(){const m=$('#m');if(!m)return;
 }
 
 /* ---------- 4. Week view ---------- */
+window.nxDecorate=()=>decorate();
 const mon=o=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7)+7*o);return d};
+window.nxMon=mon;
 function weekHtml(){const o=S.wo||0,s=mon(o),days=[...Array(7)].map((_,k)=>{const d=new Date(s);d.setDate(s.getDate()+k);return dk(d)}),td=dk();
   const rng=new Date(days[0]+'T12:00').toLocaleDateString(undefined,{day:'numeric',month:'short'})+' - '+new Date(days[6]+'T12:00').toLocaleDateString(undefined,{day:'numeric',month:'short'});
   let h=`<h1>${E(L('Week view'))}</h1><div class="chips" role="group" aria-label="Week"><button class="chip" type="button" data-a="wkgo" data-i="-1">${E(L('Previous week'))}</button><button class="chip" type="button" data-a="wkgo" data-i="0" aria-pressed="${o===0}">${E(L('This week'))}</button><button class="chip" type="button" data-a="wkgo" data-i="1">${E(L('Next week'))}</button></div><p class="mu">${E(rng)}</p>`;
   let n=0;days.forEach(k=>{const T=D.items.filter(i=>i.type==='task'&&i.due===k).sort((a,b)=>(a.done-b.done)||(a.tm||'99:99').localeCompare(b.tm||'99:99')||((pri(a)||4)-(pri(b)||4)));n+=T.length;
     const lab=new Date(k+'T12:00').toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'})+(k===td?' ('+L('today')+')':'');
-    h+=`<h2${k===td?' aria-current="date"':''}>${E(lab)}</h2>`+(T.length?list(T):'<p class="mu" style="margin:0">'+E(L('Nothing planned'))+'</p>')});
+    h+=`<section data-day="${k}"><h2${k===td?' aria-current="date"':''}>${E(lab)}</h2>`+(T.length?list(T):'<p class="mu" style="margin:0">'+E(L('Nothing planned'))+'</p>')+'</section>'});
   const un=D.items.filter(i=>i.type==='task'&&!i.done&&!i.due).length;
   h+=`<p class="mu" style="margin-top:18px">${n} ${E(L('tasks this week'))}. ${un?un+' '+E(L('have no date'))+'. ':''}<button class="chip" type="button" data-a="tab" data-i="tasks">${E(L('Go to Tasks'))}</button> <button class="chip" type="button" data-a="planview">${E(L('Plan your day'))}</button></p>`;
   return h}
