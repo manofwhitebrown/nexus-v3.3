@@ -9,6 +9,7 @@ on:
       - '*.css'
       - '*.webmanifest'
       - 'icons/**'
+      - 'fonts/**'
       - 'android/**'
       - '.github/workflows/android.yml'
   workflow_dispatch:
@@ -39,6 +40,9 @@ jobs:
 
       - name: Build the APK
         run: bash android/build.sh
+
+      - name: Check the Play Store bundle still builds (test key, not kept)
+        run: ALLOW_DEBUG_SIGNING=1 bash android/build-aab.sh
 
       - name: Keep a copy with the run
         uses: actions/upload-artifact@v4
