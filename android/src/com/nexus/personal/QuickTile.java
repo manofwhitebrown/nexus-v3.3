@@ -7,6 +7,11 @@ import android.service.quicksettings.TileService;
 
 /** A "Quick note" tile for the notification shade. Works from the lock screen too. */
 public class QuickTile extends TileService {
+
+    @Override
+    protected void attachBaseContext(android.content.Context base) {
+        super.attachBaseContext(Loc.wrap(base));
+    }
     @Override
     public void onStartListening() {
         Tile t = getQsTile();

@@ -1,6 +1,6 @@
 # Play Store hand-off for Nexus
 
-Everything here is a draft written from the code and `privacy.html` at version 3.4.0. Google's forms and policies change, so read each answer against the Play Console wording before you submit. Items marked **CHECK** are ones I could not verify from the code.
+Everything here is a draft written from the code and `privacy.html` at version 3.4.0 (updated after the Phase 5 work). Google's forms and policies change, so read each answer against the Play Console wording before you submit. Items marked **CHECK** are ones I could not verify from the code.
 
 ## 1. Listing text
 
@@ -69,7 +69,7 @@ Whether these count as "sharing" on the form depends on Google's definitions, wh
 | `RECEIVE_BOOT_COMPLETED` | Puts reminders and the bubble back after a restart | `BootReceiver` |
 | `READ_CALENDAR` | Shows the phone calendar beside tasks, read only, never copied off the device | `MainActivity` (CalendarContract) |
 | `INTERNET` | Optional sync, AI providers and links the user opens | web layer |
-| `MODIFY_AUDIO_SETTINGS` | **CHECK: I found no use of it in the Java code.** If nothing needs it, remove it from the manifest. Unused permissions invite review questions |  none found |
+| `MODIFY_AUDIO_SETTINGS` | Not used by the Java code, but the web layer's **Record** button in Capture calls `getUserMedia` inside the WebView (`capture.js`), and WebView audio capture is generally documented as needing this permission. Kept on purpose. **CHECK** on a real phone: remove it, try Record in Capture, and drop it from the manifest only if recording still works | `capture.js` via WebView |
 
 **Likely review friction.** The overlay, screen-capture and microphone foreground-service types are the permissions Play reviewers look at hardest. Be ready with:
 
@@ -82,10 +82,11 @@ I expect extra scrutiny here, but that is my understanding of how review works, 
 ## 4. Release checklist (what only you can do)
 
 1. **Release keystore.** Generate your own and keep it and its passwords out of the repo. The repo currently signs with a committed debug keystore (`android/debug.keystore`, password `android`). Never upload a build signed with that to Play. With Play App Signing, the key you sign with is only your upload key, but you still need to protect it.
-2. **AAB build.** Play needs an `.aab`. `android/build.sh` produces an `.apk` with `aapt` and cannot make an AAB. This is item 4 and is not done.
+2. **AAB build.** Done. `android/build-aab.sh` builds `android/build/nexus.aab` and signs it with the key named in `NEXUS_KEYSTORE*` environment variables; it refuses to run without one. The manual workflow `.github/workflows/aab.yml` does the same from four repository secrets (see the README, Releasing to Google Play). The bundle was checked with bundletool's `validate` and converted to an installable APK, but **not installed on a device**.
 3. **Target API.** `build.sh` targets API 36. **CHECK** the current minimum target level in the Play Console before upload.
 4. **Content rating** questionnaire, and the **target audience** (not for children).
 5. **Screenshots** (phone, at least two), a 512×512 icon (`icons/icon-512.png` exists), and a 1024×500 feature graphic.
 6. **Translations.** Have a native speaker review `i18n-data.js` for Hindi and Telugu before you advertise those languages. The store listing in each language also needs translating.
 7. **Real-phone testing** of the bubble, widget, tile, reminders, calendar and boot behaviour on at least two Android versions.
-8. **Known bug to fix first:** the flaky attachment test (an attachment can vanish after a lock and unlock in about 6% of runs). Do not ship until it is understood.
+8. **The flaky attachment test is explained.** It stored a file no item pointed to, reloaded, and read it back. At startup `patch.js` deletes attachment files that no item points to, so the test passed or failed on a race with that clean-up (reproduced: 12 of 12 failures with a short delay, 0 of 12 when an item points to the file). The app was behaving as designed; the test now attaches the file to an item and a second test checks the clean-up. One consequence worth knowing: a file attached in the Capture sheet but never saved is removed at the next start.
+9. **Native strings follow the language chosen in Nexus** (not only the phone language) through `Loc.java` and the `setLang` bridge. Test it on a phone with the system in English and Nexus set to Hindi: the bubble, quick add, reminder button and widget text should all be Hindi.

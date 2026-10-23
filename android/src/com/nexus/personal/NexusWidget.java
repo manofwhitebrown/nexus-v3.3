@@ -34,6 +34,10 @@ public class NexusWidget extends AppWidgetProvider {
 
     static RemoteViews build(Context c) {
         RemoteViews v = new RemoteViews(c.getPackageName(), R.layout.widget);
+        Context lc = Loc.wrap(c);
+        v.setTextViewText(R.id.title, lc.getString(R.string.widget_title));
+        v.setTextViewText(R.id.add, lc.getString(R.string.widget_add));
+        v.setTextViewText(R.id.empty, lc.getString(R.string.widget_empty));
         v.setOnClickPendingIntent(R.id.add, PendingIntent.getActivity(c, 1,
                 new Intent(c, QuickAddActivity.class), FLAGS));
         v.setOnClickPendingIntent(R.id.title, PendingIntent.getActivity(c, 2,

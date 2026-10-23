@@ -1,4 +1,4 @@
-const SCOPE=self.registration.scope,VERSION='nexus-3.4.0|'+SCOPE;
+const SCOPE=self.registration.scope,VERSION='nexus-3.4.1|'+SCOPE;
 const SHELL=['./','index.html','ai.js','patch.js','capture.js','features.js','native.js','vault.js','safety.js','sync.js','dates.js','i18n.js','i18n-data.js','launch.js','fonts.css','palette.js','plan.js','phone.js','portability.js','study.js','smart.js','theme.css','manifest.webmanifest','privacy.html','terms.html','404.html','offline.html','error.html','icons/favicon.svg','icons/logo.svg','icons/apple-touch-icon.png','icons/icon-192.png','icons/icon-512.png','icons/icon-maskable-512.png','fonts/familjen-grotesk-latin-400.woff2','fonts/familjen-grotesk-latin-600.woff2','fonts/familjen-grotesk-latin-700.woff2'];
 
 self.addEventListener('install',e=>{

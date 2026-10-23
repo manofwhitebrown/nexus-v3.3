@@ -1,27 +1,21 @@
 # Phase 5 status (hand-off)
 
-## Done and in this package
-- Bug fixes: monthly repeat / "in N months" no longer skips a month (addMo in index.html, features.js, dates.js).
-- Dates: Hindi and Telugu weekdays, "every / next week / in N days" phrases, Unicode-safe word boundaries (dates.js).
-- First-run tour rebuilt (launch.js): 4 steps, language chooser, never opens over another dialog, counts as seen however it is closed.
-- Language layer (i18n.js + i18n-data.js): English, Hindi, Telugu. Never translates the user's own text.
-- Language picker in Settings; dates follow the chosen language.
-- Fonts bundled locally (fonts/, fonts.css): Familjen Grotesk, Noto Sans Devanagari, Noto Sans Telugu. Google Fonts removed from every page.
-- Accessibility helpers (launch.js): dialogs named, focus returns, chip groups labelled, skip link.
-- Android: .woff2 MIME type, build.sh copies fonts/, workflow watches fonts/**.
-- privacy.html: font sentence corrected, Android permissions section added.
-- Version 3.4.0; sw.js cache list updated.
-- All existing tests pass (after the version-string update in tests/vault.mjs).
+## Done
+- Bug fixes: monthly repeat and "in N months" no longer skip a month. Tested, including month ends and a leap year.
+- Dates: Hindi and Telugu weekdays, "every", "next week", "in N days", Unicode-safe word boundaries. Tested.
+- First-run tour (four steps, language first, never over another dialog, counts as seen however closed). Tested.
+- Language layer (English, Hindi, Telugu): never translates the user's own text. Tested, including no wrong-script characters and `$` placeholders kept.
+- Fonts bundled locally. Accessibility helpers (named dialogs, labelled groups, skip link). Tested.
+- Android strings: `values`, `values-hi`, `values-te` with identical keys. All user-facing text in the Java code, including all of `BubbleService`, the Quick add toast, the reminder channel and Done button, and the widget text, now comes from resources. Tests check keys, placeholders, scripts, references and that no English is left in the Java.
+- Native screens follow the language chosen inside Nexus (`Loc.java`, the `setLang` bridge, `i18n.js` tells Android).
+- `fonts/**` added to the Android workflow paths.
+- Flaky attachment test: explained and fixed (a test defect, see PLAY_STORE.md section 4, item 8).
+- AAB: `android/build-aab.sh` (bundletool, signing from environment variables, refuses without a key) and the manual `aab.yml` workflow. Built, validated and converted to an installable APK with a throw-away key.
+- `PLAY_STORE.md`, README and ROADMAP updated. `MODIFY_AUDIO_SETTINGS` kept on purpose (WebView recording), with a CHECK.
 
-## Still to do (next session)
-1. i18n-data.js: run a crawl in Hindi/Telugu mode and fill the strings that are still English
-   (recap, plan, command palette, sync/encryption dialogs, long help text). Native speaker must review Hindi and Telugu.
-2. New tests: language layer (user text never translated, no wrong-script characters), date fixes, tour, a11y audit.
-3. Android: values-hi / values-te string files; move hard-coded English out of the Java code
-   (Done button, "Task reminders" channel, widget labels "today"/"tomorrow").
-4. AAB build script + release signing from secrets (Play needs an AAB, not the debug APK).
-5. PLAY_STORE.md: listing text, data-safety answers, justification for overlay / screen-capture / foreground-service permissions.
-6. README + ROADMAP update, rebuild APK to verify.
+## Not tried
+- Installing the APK or the AAB on a real phone, and the new language switching on a real phone.
+- Play's review of the overlay, screen-capture and microphone permissions.
 
 ## Only you can do
-Native-speaker review of the translations, real-phone testing, Play Console account, release keystore, screenshots.
+Native-speaker review of Hindi and Telugu (web and Android strings), real-phone testing, a Play Console account, your own release keystore and the four GitHub secrets, screenshots and the feature graphic, a contact email for the listing.

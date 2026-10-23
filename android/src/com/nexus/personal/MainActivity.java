@@ -51,6 +51,11 @@ import java.util.Map;
  * saving backups to the Downloads folder.
  */
 public class MainActivity extends Activity {
+
+    @Override
+    protected void attachBaseContext(android.content.Context base) {
+        super.attachBaseContext(Loc.wrap(base));
+    }
     static final String HOST = "appassets.androidplatform.net";
     private static final int REQ_FILE = 7, REQ_MIC = 8, REQ_NOTIF = 9, REQ_SPEECH = 13, REQ_CAL = 14;
 
@@ -395,6 +400,13 @@ public class MainActivity extends Activity {
         }
 
         /** The few tasks the home-screen widget shows. */
+        @JavascriptInterface
+        public void setLang(String v) {
+            String before = Loc.get(MainActivity.this);
+            Loc.set(MainActivity.this, v);
+            if (!before.equals(Loc.get(MainActivity.this))) NexusWidget.refresh(MainActivity.this);
+        }
+
         @JavascriptInterface
         public void setSnapshot(String json) {
             Snap.write(MainActivity.this, json == null ? "[]" : json);

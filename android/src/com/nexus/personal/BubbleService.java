@@ -54,6 +54,11 @@ import java.nio.ByteBuffer;
  * next time the app is opened.
  */
 public class BubbleService extends Service {
+
+    @Override
+    protected void attachBaseContext(android.content.Context base) {
+        super.attachBaseContext(Loc.wrap(base));
+    }
     static final String CHANNEL = "nexus_bubble";
     static final String ACTION_STOP = "com.nexus.personal.STOP";
     static final String ACTION_PROJECTION = "com.nexus.personal.PROJECTION";
@@ -198,7 +203,7 @@ public class BubbleService extends Service {
     private void refreshForeground(boolean wantProjection) {
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= 26) {
-            NotificationChannel ch = new NotificationChannel(CHANNEL, "Floating bubble",
+            NotificationChannel ch = new NotificationChannel(CHANNEL, getString(R.string.bubble_channel),
                     NotificationManager.IMPORTANCE_MIN);
             ch.setShowBadge(false);
             nm.createNotificationChannel(ch);
@@ -211,14 +216,14 @@ public class BubbleService extends Service {
         Notification.Builder b = Build.VERSION.SDK_INT >= 26
                 ? new Notification.Builder(this, CHANNEL)
                 : new Notification.Builder(this);
-        String text = recording ? "Recording a voice note."
-                : (projection != null ? "Screenshots are ready." : "Tap the bubble to jot a note.");
+        String text = recording ? getString(R.string.bubble_recording)
+                : (projection != null ? getString(R.string.bubble_shots_ready) : getString(R.string.bubble_tap));
         b.setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Nexus bubble is on")
+                .setContentTitle(getString(R.string.bubble_title))
                 .setContentText(text)
                 .setContentIntent(open)
                 .setOngoing(true)
-                .addAction(0, "Hide bubble", stop);
+                .addAction(0, getString(R.string.bubble_hide), stop);
         int type = 0;
         if (Build.VERSION.SDK_INT >= 34) type |= ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE;
         if (recording && Build.VERSION.SDK_INT >= 30) type |= ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE;
@@ -240,7 +245,7 @@ public class BubbleService extends Service {
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
         } catch (Exception e) {
-            toast("Open Nexus once, then try again.");
+            toast(getString(R.string.open_nexus_once));
         }
     }
 
@@ -316,7 +321,7 @@ public class BubbleService extends Service {
     private void addBubble() {
         bubble = new LogoBubble(this);
         bubble.setAlpha(0.96f);
-        bubble.setContentDescription("Nexus quick note");
+        bubble.setContentDescription(getString(R.string.bubble_desc));
 
         int size = dp(54);
         bubbleLp = new WindowManager.LayoutParams(size, size, overlayType(),
@@ -514,13 +519,13 @@ public class BubbleService extends Service {
         head.setOrientation(LinearLayout.HORIZONTAL);
         head.setGravity(Gravity.CENTER_VERTICAL);
         TextView title = new TextView(this);
-        title.setText("Quick note");
+        title.setText(R.string.quick_note);
         title.setTextColor(0xFFECECEA);
         title.setTypeface(Typeface.DEFAULT_BOLD);
         title.setTextSize(17);
         head.addView(title, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
         TextView x = new TextView(this);
-        x.setText("Close");
+        x.setText(R.string.close);
         x.setTextColor(0xFF9A9A9F);
         x.setTextSize(14);
         x.setPadding(dp(10), dp(6), dp(2), dp(6));
@@ -534,7 +539,7 @@ public class BubbleService extends Service {
         panel.addView(head);
 
         input = new EditText(this);
-        input.setHint("Type a note");
+        input.setHint(getString(R.string.type_note));
         input.setHintTextColor(0xFF9A9A9F);
         input.setTextColor(0xFFECECEA);
         input.setTextSize(16);
@@ -557,7 +562,7 @@ public class BubbleService extends Service {
         LinearLayout chips = new LinearLayout(this);
         chips.setOrientation(LinearLayout.HORIZONTAL);
         final String[] kinds = {"auto", "note", "task", "idea"};
-        final String[] names = {"Auto", "Note", "Task", "Idea"};
+        final String[] names = {getString(R.string.kind_auto), getString(R.string.kind_note), getString(R.string.kind_task), getString(R.string.kind_idea)};
         final TextView[] cs = new TextView[kinds.length];
         for (int i = 0; i < kinds.length; i++) {
             final int idx = i;
@@ -585,9 +590,9 @@ public class BubbleService extends Service {
 
         LinearLayout media = new LinearLayout(this);
         media.setOrientation(LinearLayout.HORIZONTAL);
-        recBtn = button("Record voice", 0xFF2E2E32, 0xFFECECEA);
+        recBtn = button(getString(R.string.record_voice), 0xFF2E2E32, 0xFFECECEA);
         recBtn.setTextSize(14);
-        TextView shot = button("Screenshot", 0xFF2E2E32, 0xFFECECEA);
+        TextView shot = button(getString(R.string.screenshot), 0xFF2E2E32, 0xFFECECEA);
         shot.setTextSize(14);
         recBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -623,20 +628,20 @@ public class BubbleService extends Service {
 
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
-        TextView save = button("Save", 0xFFF6F6F4, 0xFF0D0D0E);
-        TextView open = button("Open Nexus", 0xFF2E2E32, 0xFFECECEA);
+        TextView save = button(getString(R.string.save), 0xFFF6F6F4, 0xFF0D0D0E);
+        TextView open = button(getString(R.string.open_nexus), 0xFF2E2E32, 0xFFECECEA);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String text = input.getText().toString().trim();
                 if (text.length() == 0) {
-                    status.setText("Type something first.");
+                    status.setText(getString(R.string.type_first));
                     return;
                 }
                 if (text.length() > 5000) text = text.substring(0, 5000);
                 Inbox.add(BubbleService.this, text, kind);
                 input.setText("");
-                status.setText("Saved. It will show up in Nexus.");
+                status.setText(getString(R.string.saved_inbox));
             }
         });
         open.setOnClickListener(new View.OnClickListener() {
@@ -723,10 +728,10 @@ public class BubbleService extends Service {
         if (recBtn == null) return;
         if (recording) {
             long sec = (android.os.SystemClock.elapsedRealtime() - recStart) / 1000;
-            recBtn.setText("Stop " + (sec / 60 < 10 ? "0" : "") + (sec / 60) + ":" + (sec % 60 < 10 ? "0" : "") + (sec % 60));
+            recBtn.setText(getString(R.string.stop_fmt, (sec / 60 < 10 ? "0" : "") + (sec / 60) + ":" + (sec % 60 < 10 ? "0" : "") + (sec % 60)));
             recBtn.setTextColor(0xFFE8847C);
         } else {
-            recBtn.setText("Record voice");
+            recBtn.setText(R.string.record_voice);
             recBtn.setTextColor(0xFFECECEA);
         }
     }
@@ -744,7 +749,7 @@ public class BubbleService extends Service {
         if (recording) return;
         if (Build.VERSION.SDK_INT >= 23
                 && checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            say("Allow the microphone, then tap Record again.");
+            say(getString(R.string.allow_mic));
             openAction("mic");
             return;
         }
@@ -765,7 +770,7 @@ public class BubbleService extends Service {
             recStart = android.os.SystemClock.elapsedRealtime();
             handler.post(tick);
             updateRecUi();
-            say("Recording. The red dot on the bubble shows it is on.");
+            say(getString(R.string.recording_on));
         } catch (Exception e) {
             recording = false;
             try {
@@ -779,7 +784,7 @@ public class BubbleService extends Service {
             } catch (Exception ignored) {
             }
             updateRecUi();
-            say("Android would not let the bubble record just now. Open Nexus once, then try again.");
+            say(getString(R.string.record_blocked));
         }
     }
 
@@ -799,11 +804,11 @@ public class BubbleService extends Service {
         rec = null;
         handler.removeCallbacks(tick);
         if (good && recFile != null && recFile.length() > 0) {
-            Inbox.addMedia(this, "voice", recFile.getName(), "Voice note");
-            if (!quiet) say("Saved. It will show up in Nexus.");
+            Inbox.addMedia(this, "voice", recFile.getName(), getString(R.string.voice_note_title));
+            if (!quiet) say(getString(R.string.saved_inbox));
         } else {
             if (recFile != null) recFile.delete();
-            if (!quiet) say("That was too short to keep.");
+            if (!quiet) say(getString(R.string.too_short));
         }
         recFile = null;
         try {
@@ -818,7 +823,7 @@ public class BubbleService extends Service {
     private void takeShot() {
         if (projection == null || reader == null) {
             shotPending = true;
-            say("Allow screen capture. On the next screen choose Entire screen.");
+            say(getString(R.string.allow_capture));
             openAction("projection");
             return;
         }
@@ -863,7 +868,7 @@ public class BubbleService extends Service {
             }
         } catch (Exception e) {
             endProjection();
-            toast("Screen capture could not start.");
+            toast(getString(R.string.capture_failed));
         }
     }
 
@@ -914,7 +919,7 @@ public class BubbleService extends Service {
     private void saveFrame() {
         Image im = held;
         if (im == null) {
-            toast("No picture yet. Try again.");
+            toast(getString(R.string.no_picture));
             return;
         }
         try {
@@ -943,18 +948,18 @@ public class BubbleService extends Service {
                         @Override
                         public void run() {
                             if (done) {
-                                Inbox.addMedia(BubbleService.this, "screenshot", out.getName(), "Screenshot");
-                                toast("Screenshot saved to Nexus");
+                                Inbox.addMedia(BubbleService.this, "screenshot", out.getName(), getString(R.string.screenshot));
+                                toast(getString(R.string.shot_saved));
                             } else {
                                 out.delete();
-                                toast("Could not save the screenshot.");
+                                toast(getString(R.string.shot_save_failed));
                             }
                         }
                     });
                 }
             }).start();
         } catch (Exception e) {
-            toast("Could not take the screenshot.");
+            toast(getString(R.string.shot_failed));
         }
     }
 

@@ -14,6 +14,11 @@ import android.widget.Toast;
  * ask for itself: permission to use the microphone, and permission to capture the screen.
  */
 public class ActionActivity extends Activity {
+
+    @Override
+    protected void attachBaseContext(android.content.Context base) {
+        super.attachBaseContext(Loc.wrap(base));
+    }
     private static final int REQ_MIC = 11;
     private static final int REQ_PROJECTION = 12;
 

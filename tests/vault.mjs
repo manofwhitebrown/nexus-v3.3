@@ -94,11 +94,20 @@ await t('attachments are stored sealed, read back exactly, and survive a lock an
   const {br,p}=await encrypted();
   p.ev(`window.__b=new Blob([new Uint8Array([1,2,3,250,251,252])],{type:'audio/webm'})`);
   await p.ev(`bput('m1',window.__b)`);
+  /* a real attachment is always pointed to by an item. Without one, the startup clean-up (patch.js gc) rightly deletes the file,
+     and whether this test passed depended on a race with it. */
+  p.ev(`addItem({type:'note',title:'Voice',body:'',url:'',tags:[],project:null,due:null,promise:false,media:{id:'m1',kind:'audio',mime:'audio/webm',name:'v.webm'}})`);await p.flush();
   const raw=await dump(br,'nexus-media/','b');assert.equal(raw.keys[0],'m1');assert.equal(raw.vals[0].nxe,1);assert.ok(!(raw.vals[0] instanceof p.w.Blob));
   const back=await p.ev(`bget('m1')`);assert.equal(back.type,'audio/webm');
   assert.deepEqual([...new Uint8Array(await back.arrayBuffer())],[1,2,3,250,251,252]);p.close();
   const q=await boot(br,{locked:true});await unlockUI(q,PW);
+  await q.sleep(300);   /* let the startup clean-up finish: a referenced attachment must survive it */
   const b2=await q.ev(`bget('m1')`);assert.deepEqual([...new Uint8Array(await b2.arrayBuffer())],[1,2,3,250,251,252]);q.close()});
+await t('at startup an attachment no item points to is removed, and one an item points to is kept',async()=>{
+  const br=newBrowser(),p=await boot(br);p.ev(`window.__b=new Blob([new Uint8Array([5,6])],{type:'image/jpeg'})`);
+  await p.ev(`bput('keep',window.__b)`);await p.ev(`bput('orphan',window.__b)`);
+  p.ev(`addItem({type:'note',title:'Pic',body:'',url:'',tags:[],project:null,due:null,promise:false,media:{id:'keep',kind:'photo',mime:'image/jpeg',name:'p.jpg'}})`);await p.flush();p.close();
+  const q=await boot(br);await q.sleep(300);const d=await dump(br,'nexus-media/','b');assert.deepEqual(d.keys,['keep']);q.close()});
 
 await t('existing attachments are sealed when encryption goes on and opened when it goes off',async()=>{
   const br=newBrowser(),p=await boot(br);p.ev(`window.__b=new Blob([new Uint8Array([9,8,7])],{type:'image/jpeg'})`);await p.ev(`bput('m2',window.__b)`);

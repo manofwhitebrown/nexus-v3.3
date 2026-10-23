@@ -120,8 +120,9 @@ for(const k of ['alert','confirm','prompt']){nat[k]=window[k];
 
 /* ---------- switching ---------- */
 const subs=[];
+function tellNative(){try{if(window.NexusNative&&NexusNative.setLang)NexusNative.setLang(pref)}catch(e){}}
 function apply(){
-  document.documentElement.lang=active;
+  document.documentElement.lang=active;tellNative();
   wrapDates();
   watch(active!=='en');
   if(ready){rescan();for(const f of subs){try{f(active)}catch(e){}}}}

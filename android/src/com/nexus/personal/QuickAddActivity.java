@@ -20,6 +20,11 @@ import android.widget.Toast;
  * What you type waits in the inbox and is filed by Nexus the next time it opens.
  */
 public class QuickAddActivity extends Activity {
+
+    @Override
+    protected void attachBaseContext(android.content.Context base) {
+        super.attachBaseContext(Loc.wrap(base));
+    }
     private EditText box;
 
     @Override
@@ -86,7 +91,7 @@ public class QuickAddActivity extends Activity {
         }
         if (t.length() > 5000) t = t.substring(0, 5000);
         Inbox.add(this, t, kind);
-        Toast.makeText(this, "Saved. It appears in Nexus next time you open it.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.saved_later), Toast.LENGTH_SHORT).show();
         finish();
     }
 }

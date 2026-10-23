@@ -17,6 +17,10 @@ A personal system for tasks, notes, links, projects, study and focus, all connec
 | `study.js` | FSRS-5 spaced repetition for flashcards |
 | `smart.js` | Search that forgives typos, cards made from notes, automatic tags, the daily study plan |
 | `tests/`, `package.json` | `npm test` boots the real app in a simulated browser and checks the safety net, encryption, sync, dates, study and the rest. Runs on every push (`.github/workflows/test.yml`) |
+| `i18n.js`, `i18n-data.js` | The language layer: English, Hindi and Telugu. Translates the app's own words, never yours. `i18n-data.js` is the dictionary to hand to a native speaker |
+| `launch.js` | First-run tour (four steps, language first), the Language setting, and accessibility helpers (named dialogs, focus, labelled groups, skip link) |
+| `fonts/`, `fonts.css` | Fonts bundled with the app (Familjen Grotesk, Noto Sans Devanagari, Noto Sans Telugu), so nothing loads from Google |
+| `PLAY_STORE.md` | Google Play hand-off: listing text, data-safety answers, permission justifications, release checklist |
 | `ai.js` | Free AI router: tries your Gemini, Groq, OpenRouter, Mistral and Cerebras keys in order and moves on when a limit is hit |
 | `dates.js` | Smarter task dates: weekdays, "in 3 days", "every Monday", a few Hindi and Telugu words |
 | `palette.js` | Command palette (Ctrl+K), `/` to search, `c` to capture |
@@ -24,13 +28,14 @@ A personal system for tasks, notes, links, projects, study and focus, all connec
 | `offline.html`, `error.html`, `404.html` | Offline page, error page (`?code=503` and so on) and not-found page |
 | `plan.js` | Time: start time and length for tasks, the Plan screen (drag a task onto the day, drag its edge to resize), phone calendar beside your tasks, the shrinking disc in Focus, and "at 5pm" / "in 2 hours" / "for 45 min" phrases |
 | `phone.js` | Dictation button, the home-screen widget list, and task reminders handed to Android alarms (browser notifications when there is no Android app) |
-| `tests/` | Browser tests (`npm test`). They run on every push in `.github/workflows/test.yml` |
 | `features.js` | Files, recap, command center, study chapters, project details, repeating tasks, links, app lock, encrypted backups, appearance |
 | `theme.css` | The graphite theme (monochrome, matches the logo; loaded after the app's own CSS) |
 | `native.js` | Android app bridge: imports notes, recordings and screenshots from the floating bubble, bubble switch in Settings, saves backups to Downloads |
 | `sw.js` | Offline support and notification taps |
 | `android/` | Source for the Android app (a web view around this app plus the floating bubble) |
-| `.github/workflows/android.yml` | Builds the Android app on GitHub and publishes it as the latest release |
+| `.github/workflows/android.yml` | Runs the tests, builds the Android app on GitHub and publishes it as the latest release |
+| `.github/workflows/aab.yml` | Manual: builds the signed Play Store bundle from your secrets |
+| `android/build.sh`, `android/build-aab.sh` | Build the APK (debug-signed) and the Play bundle (your key) without Gradle |
 | `manifest.webmanifest`, `icons/` | Makes it installable. `icons/logo.svg` is the mark, `icons/favicon.svg` follows the system theme |
 | `privacy.html`, `terms.html`, `404.html` | Static pages |
 
@@ -57,9 +62,24 @@ A web page cannot float over other apps, so the Android app does it natively. It
 
 **Recording** needs the microphone permission, which Android asks for the first time you tap Record. **Screenshots** need Android's screen capture permission: tap Screenshot, allow it, and on Android 14 and newer choose **Entire screen** (choosing a single app only captures that app). While screenshots are ready, Android shows its normal screen-capture icon in the status bar. The bubble hides itself for a moment so it is not in the picture. Recordings and screenshots wait in the inbox and appear in Nexus as voice and photo items tagged `bubble`.
 
-The app is signed with the key in `android/debug.keystore`, which is public. That is fine for a personal app you install yourself, and it lets new versions install over old ones. It is not suitable for the Play Store. The app has its own storage, separate from the browser: use Export backup in one and Restore backup in the other to move your items.
+The app is signed with the key in `android/debug.keystore`, which is public. That is fine for a personal app you install yourself, and it lets new versions install over old ones. It is not suitable for the Play Store (see Releasing to Google Play below). The app has its own storage, separate from the browser: use Export backup in one and Restore backup in the other to move your items.
 
 To build it yourself: `sudo apt-get install -y openjdk-21-jdk-headless aapt apksigner zipalign dalvik-exchange` and run `android/build.sh`.
+
+### Language in the Android app
+
+The web layer and the native screens (floating bubble, quick add, reminder notifications, widget text) both follow the language chosen in Nexus (Settings > Language). "Phone language" follows Android. The native strings live in `android/res/values/`, `values-hi/` and `values-te/` and must keep identical keys; `npm test` checks that, and that no English is left hard-coded in the Java files. Hindi and Telugu were written without a native-speaker review: have someone read them before you advertise those languages.
+
+### Releasing to Google Play
+
+Play needs a signed Android App Bundle (`.aab`), not the debug-signed APK above, and you must sign it with your own key.
+
+1. Make an upload keystore once and keep it and its passwords out of the repo: `keytool -genkeypair -v -keystore upload.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000`.
+2. Build it on your machine: `NEXUS_KEYSTORE=upload.jks NEXUS_KEYSTORE_PASSWORD=... NEXUS_KEY_ALIAS=upload bash android/build-aab.sh` (needs the same packages as above, plus `aapt2`, which comes with the `aapt` package). The output is `android/build/nexus.aab`. The script refuses to run without a key; `ALLOW_DEBUG_SIGNING=1` makes a test-only bundle that Play will reject.
+3. Or build it on GitHub: add the secrets `NEXUS_KEYSTORE_BASE64` (`base64 -w0 upload.jks`), `NEXUS_KEYSTORE_PASSWORD`, `NEXUS_KEY_ALIAS` and `NEXUS_KEY_PASSWORD`, then run Actions > Build Play Store bundle (AAB). The bundle is kept as a private workflow artifact for 14 days and is never published as a release.
+4. Raise the version each upload: `VERSION_CODE` must grow every time (the workflow uses the run number).
+
+`PLAY_STORE.md` has the listing text, the data-safety answers, the permission justifications and the checklist of what only you can do.
 
 ### Widget, quick add, shortcuts and reminders (Android app)
 
