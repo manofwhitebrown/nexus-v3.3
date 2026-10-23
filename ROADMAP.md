@@ -10,16 +10,16 @@ Status: done, partial, not started.
 | 04 Nexus AI | partial | Offline Find, plan, summarise, compare, history; optional AI answers, explain, read files | Saved AI chats per project, semantic search |
 | 05 Study | done | Subjects, flashcards, spaced repetition, chapters, material, exam date, study sessions, time studied | A separate question bank (flashcards serve as questions) |
 | 06 Projects | done | Description, deadline, files, recent activity, tasks, notes, links | AI chats per project |
-| 07 Tasks                   | partial | Due dates, projects, promised flag, repeating tasks, explicit links, start time and length, time-blocking on the Plan screen, reminders at the start time, "at 5pm" and "in 2 hours" phrases | Subtasks, priorities |
-| 08 Files | partial | Files view in Library, photos, voice, files, collections | Inline PDF viewer, folders |
+| 07 Tasks                   | partial | Due dates, projects, promised flag, repeating tasks, explicit links, start time and length, time-blocking on the Plan screen, reminders at the start time (and at a chosen hour for dated tasks with no time), "at 5pm" and "in 2 hours" phrases, **priorities, steps inside a task, priority filter and sort, Week view, streak line** | Drag between days in the Week view, steps from the widget |
+| 08 Files | partial | Files view in Library, photos, voice, files, collections, **inline PDF viewer** (where the browser can show PDFs) | Folders |
 | 09 Saved | partial | Links with domain, share-to-Nexus, Saved collection | Page titles and thumbnails |
 | 10 Timeline | done | Created, edited, finished, focused; ask "what was I doing on Sunday"; clear timeline | None |
 | 11 Command center | done | Top bar commands, command sheet, pull down from the top | Voice commands |
-| 12 Focus mode              | done    | Timer that survives screen lock, pause, logging of minutes, a disc that shrinks as time runs out | Breaks, wake lock |
+| 12 Focus mode              | done    | Timer that survives screen lock, pause, logging of minutes, a disc that shrinks as time runs out, **5 minute break, screen wake lock** | Long-break cycles |
 | 13 Recap | done | Today ring, 7-day chart, week totals, tomorrow preview | Monthly recap |
 | 14 Personalization | partial | Dark, light, match phone; four accents; three text sizes | Wallpaper, layouts, navigation style |
 | 15 The Nexus (connections) | done | Automatic related items plus links you make, with backlinks | Graph view |
-| 16 Smart collections | done | Unfinished, overdue, saved, ideas, this week, untouched, study material, recently studied, exam material | Custom rules |
+| 16 Smart collections | done | Unfinished, overdue, saved, ideas, this week, untouched, study material, recently studied, exam material, **high priority, tasks with open steps** | Custom rules the user writes |
 | 17 Privacy | done | Local-first, PIN lock, encrypted backups, backup reminders, delete-all that wipes everything (vault, trash, restore points, attachments), **encryption at rest** with a recovery key, **sync** through a folder or your own Dropbox with end-to-end encryption, merge a backup file | Sync through Google Drive, background sync when the app is closed |
 | 18 Tech foundation         | partial | Installable PWA, offline, shortcuts, share target, Android app with floating bubble, widget, quick-settings tile, native reminders, calendar and speech bridges | Launcher mode, sync |
 
@@ -42,7 +42,7 @@ Written for what the code does, not what has been tried on a phone. The Android 
 |---|---|
 | 0. Make it unbreakable | Done in code: trash and undo for everything (30 days), automatic restore points, a second copy in IndexedDB, damaged-data recovery, a 5,000-item test, **Export as Markdown (zip: Tasks.md, Notes/, Study/)**, **import from Todoist (.csv), Google Keep (.json), Evernote (.enex) and Obsidian or Notion (.md files)**, a restore point before every import, and the browser tests now run on every push and before every APK build. **Not done:** Notion and Obsidian *zip* files (unzip first and pick the .md files), Evernote and Keep attachments. |
 | 1. Fastest capture on Android | Done in code: widget with quick add and tick-off, quick-settings tile, lock-screen quick add, launcher shortcuts, dictation, smarter dates, calm overdue (no red), command palette. Not done: transcription of recorded voice notes. |
-| 2. Time | Done in code: phone calendar beside tasks, time-blocking by dragging, shrinking-disc timer, reminders as Android alarms. Not done: reminders for tasks with a date but no time, a week view. |
+| 2. Time | Done in code: phone calendar beside tasks, time-blocking by dragging, shrinking-disc timer, reminders as Android alarms. Done since: reminders for tasks with a date but no time (default 9:00, changeable or Off in Settings) and a week view. Not done: dragging tasks between days in the week view. |
 | 3. Study and quiet intelligence | Done in code: **FSRS-5 scheduling** (Again/Hard/Good/Easy with the next gap shown, old cards converted, memory kept through backup), **cards made from notes** by rules (you review and tick them first), **smarter search** (word forms, close synonyms, typos, partial matches), **auto-tags** from tags and subjects you already use, shorter titles for long one-line notes, a gentle "looks similar" warning, and a **daily study plan** that spreads new cards over the days before an exam (20 new cards a day when no exam is set). Honest limits: search is rules and a small synonym list, not a neural model, so it will not find "car" from "automobile" unless listed; cards from notes need clear patterns like "Term: meaning" or "X is …"; no AI card-making button beyond Ask Nexus. |
 | 4. Sync and encryption | Done in code: encryption at rest for the data, safe copy, trash, restore points, attachments and keys, with an unlock screen, recovery key, change of passphrase, auto-lock and safe turn-on/turn-off; sync through a folder or Dropbox with a field-level merge, sealed attachments and conflict retry; merge a backup file. Tested with simulated devices, a simulated folder and a simulated Dropbox. **Not yet tried against the real Dropbox or the Android app with encryption on.** Not done: Google Drive, background sync. |
 | 5. Launch | Done in code: Hindi and Telugu for the web layer and the native Android screens (they follow the language chosen in Nexus), fonts bundled locally, a four-step first-run tour, accessibility pass (named dialogs, focus return, labelled groups, skip link), an AAB build script and a manual signing workflow, `PLAY_STORE.md`. Tests cover the language layer, the date fixes, the tour, accessibility and the Android string files. **Not done, and only you can do it:** native-speaker review of Hindi and Telugu, testing on real phones, a Play Console account, your own release keystore, screenshots and the feature graphic, a contact email in the store listing. Not tried: installing the bundle on a device, and Play's review of the overlay, screen-capture and microphone permissions. |
@@ -59,3 +59,15 @@ Started. The Android app in `android/` is a native wrapper (Java, built without 
 Also built: a home-screen widget, quick-settings tile, quick add over the lock screen, launcher shortcuts, alarms for task reminders, and bridges for dictation and the phone calendar.
 
 Not done: a launcher mode, and a full native rewrite in Kotlin with Compose and Room. The APK and the Play bundle both build and validate in CI-style runs, but neither has been run on a device since Phase 4.
+
+## Layout plan (from the UI research notes)
+
+| Finding | Where Nexus stands |
+|---|---|
+| List first, calendar second | Tasks is a list; Plan and the new Week view are the calendar side. A board (kanban) view is not built. |
+| Sidebar on laptops, bottom tabs on phones | Built (side rail on laptops, tab bar on phones). |
+| Quick add everywhere | Capture, the Add box on Tasks, Ctrl+K and `c`, and now Ctrl+Enter (Cmd+Enter) for Capture; widget, tile and lock-screen add on Android. |
+| Priorities, filters and visual progress | Priorities, a priority filter and sort, steps with a count, the streak line, the Recap ring and bars. |
+| Search anchors the experience | Search bar and command palette on every screen; typo-tolerant search. |
+| Progressive disclosure | Encryption, sync, API key and reminder time live in Settings; the main screens show only the daily items. |
+| Minimal Focus mode | Focus hides everything but the task and the shrinking disc; a break follows. |

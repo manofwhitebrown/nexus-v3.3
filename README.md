@@ -28,6 +28,7 @@ A personal system for tasks, notes, links, projects, study and focus, all connec
 | `palette.js` | Command palette (Ctrl+K), `/` to search, `c` to capture |
 | `capture.js` | Capture sheet (note, task, link, idea, photo, video, audio, file), numbered names, quick-note mode, notification shortcut, floating note, error guards |
 | `offline.html`, `error.html`, `404.html` | Offline page, error page (`?code=503` and so on) and not-found page |
+| `tasks2.js` | Priorities (high, medium, low) and steps inside a task, a priority filter and sort, a streak line, the Week view, a 5 minute break and a screen wake lock for Focus, the inline PDF viewer, two more smart collections, the reminder time for tasks with a date but no time (Settings), and Ctrl+Enter for Capture |
 | `plan.js` | Time: start time and length for tasks, the Plan screen (drag a task onto the day, drag its edge to resize), phone calendar beside your tasks, the shrinking disc in Focus, and "at 5pm" / "in 2 hours" / "for 45 min" phrases |
 | `phone.js` | Dictation button, the home-screen widget list, and task reminders handed to Android alarms (browser notifications when there is no Android app) |
 | `features.js` | Files, recap, command center, study chapters, project details, repeating tasks, links, app lock, encrypted backups, appearance |

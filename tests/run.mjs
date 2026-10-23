@@ -490,6 +490,7 @@ await t('Settings shows the Markdown export and import buttons once',async()=>{
 await import('./vault.mjs');
 await import('./sync.mjs');
 await import('./phase5.mjs');
+await import('./tasks2.mjs');
 
 console.log(`\n${state.pass} passed, ${state.fail} failed`);
 if(state.fail){console.log('Failed: '+state.failed.join('; '));process.exit(1)}

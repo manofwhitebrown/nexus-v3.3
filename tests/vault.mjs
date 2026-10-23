@@ -154,7 +154,7 @@ await t('Settings shows one Encryption section, and its buttons match the state'
   assert.equal(d.querySelectorAll('#nx-vault').length,1);assert.ok(d.querySelector('#nxv-on'));assert.ok(!d.querySelector('#nxv-now'));
   await p.w.NXVault.enable(PW);p.ev('A.settings()');await p.sleep(30);
   assert.equal(d.querySelectorAll('#nx-vault').length,1);assert.ok(d.querySelector('#nxv-now'));assert.ok(d.querySelector('#nxv-off'));assert.ok(!d.querySelector('#nxv-on'));
-  assert.ok(/Nexus 3\.4\.0/.test(d.querySelector('#dlg').textContent));p.close()});
+  assert.ok(/Nexus 3\.5\.0/.test(d.querySelector('#dlg').textContent));p.close()});
 
 await t('Delete all data removes the vault, the trash, restore points, attachments and keys',async()=>{
   const {br,p}=await encrypted();p.w.confirm=()=>true;await p.ev(`bput('m3',new Blob([new Uint8Array([1])]))`);

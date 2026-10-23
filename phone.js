@@ -51,10 +51,13 @@ const snapshot=()=>{const td=dk(),rk=t=>t.due&&t.due<td?0:t.due===td?1:t.promise
   return D.items.filter(i=>i.type==='task'&&!i.done)
     .sort((a,b)=>rk(a)-rk(b)||(a.due||'9').localeCompare(b.due||'9')||(a.tm||'99:99').localeCompare(b.tm||'99:99')||a.created.localeCompare(b.created))
     .slice(0,6).map(t=>({id:t.id,t:String(t.title||'Untitled').slice(0,60),d:label(t)}))};
-const reminders=()=>{const from=Date.now()+5e3;
-  return D.items.filter(i=>i.type==='task'&&!i.done&&T.slot(i)).map(i=>({i,at:T.at(i)})).filter(x=>x.at>from)
-    .sort((a,b)=>a.at-b.at).slice(0,50)
-    .map(({i,at})=>({id:i.id,at,title:String(i.title||'Task').slice(0,80),body:[T.fmt(T.slot(i).s),pname(i.project)].filter(Boolean).join(' · ')}))};
+const RDK='nexus.remdef'+NS,defTm=()=>{try{const v=localStorage.getItem(RDK);return v===null?'09:00':v}catch(e){return'09:00'}};
+const reminders=()=>{const from=Date.now()+5e3,dt=defTm(),open=D.items.filter(i=>i.type==='task'&&!i.done);
+  const timed=open.filter(i=>T.slot(i)).map(i=>({i,at:T.at(i),tm:T.fmt(T.slot(i).s)}));
+  /* a task with a date but no time rings at the chosen time that day (Settings; Off turns it off). Past times are never sent. */
+  const dated=/^\d{2}:\d{2}$/.test(dt)?open.filter(i=>i.due&&!T.slot(i)).map(i=>{const d=new Date(i.due+'T00:00');d.setHours(+dt.slice(0,2),+dt.slice(3),0,0);return{i,at:d.getTime(),tm:dt}}):[];
+  return timed.concat(dated).filter(x=>x.at>from).sort((a,b)=>a.at-b.at).slice(0,50)
+    .map(({i,at,tm})=>({id:i.id,at,title:String(i.title||'Task').slice(0,80),body:[tm,pname(i.project)].filter(Boolean).join(' \u00b7 ')}))};
 window.nxSnapshot=snapshot;window.nxReminders=reminders;
 
 if(N){

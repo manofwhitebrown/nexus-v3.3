@@ -77,7 +77,7 @@ a{color:var(--lk)}
 <dialog id="dlg"></dialog><div id="toast" role="status"></div><div id="fx" role="dialog" aria-label="Focus mode"></div>
 <script type="text/nx-defer">
 const $=s=>document.querySelector(s),E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const NS=location.pathname.replace(/[^\/]*$/,''),K='nexus.data'+NS,APP_VERSION='3.4.0';let D={items:[],projects:[],log:[],study:[]},S={tab:'home',skip:0,pj:null,col:null,type:'auto'};
+const NS=location.pathname.replace(/[^\/]*$/,''),K='nexus.data'+NS,APP_VERSION='3.5.0';let D={items:[],projects:[],log:[],study:[]},S={tab:'home',skip:0,pj:null,col:null,type:'auto'};
 let OK=0;try{const r=JSON.parse(localStorage.getItem(K)||'{}');if(r&&typeof r==='object')D={items:Array.isArray(r.items)?r.items:[],projects:Array.isArray(r.projects)?r.projects:[],log:Array.isArray(r.log)?r.log:[],study:Array.isArray(r.study)?r.study:[]};OK=1}catch(e){}
 const LB=D.log.length;{const ids=new Set(D.items.map(x=>x.id));D.log=D.log.filter(l=>ids.has(l.id))}
 const TH='nexus.theme'+NS,th=()=>{try{return localStorage.getItem(TH)||'dark'}catch(e){return'dark'}};
@@ -263,6 +263,7 @@ if('serviceWorker' in navigator){const reg=()=>navigator.serviceWorker.register(
 <script type="text/nx-defer" data-src="dates.js"></script>
 <script type="text/nx-defer" data-src="palette.js"></script>
 <script type="text/nx-defer" data-src="plan.js"></script>
+<script type="text/nx-defer" data-src="tasks2.js"></script>
 <script type="text/nx-defer" data-src="phone.js"></script>
 <script type="text/nx-defer" data-src="native.js"></script>
 <script type="text/nx-defer" data-src="portability.js"></script>
