@@ -139,6 +139,73 @@ A(["Nexus: tasks, notes and projects","Nexus: कार्य, नोट्स �
 ["Monday","सोमवार","సోమవారం"],["Tuesday","मंगलवार","మంగళవారం"],["Wednesday","बुधवार","బుధవారం"],["Thursday","गुरुवार","గురువారం"],["Friday","शुक्रवार","శుక్రవారం"],["Saturday","शनिवार","శనివారం"],["Sunday","रविवार","ఆదివారం"],
 ["Pause","रोकें","పాజ్"],["Resume","फिर शुरू करें","తిరిగి ప్రారంభించండి"],["End","समाप्त","ముగించు"],["Finish","पूरा करें","ముగించు"],["Start","शुरू करें","ప్రారంభించు"],["Break","विराम","విరామం"],["Time for a break","विराम का समय","విరామ సమయం"],["Focus session finished","फ़ोकस सत्र पूरा हुआ","ఫోకస్ సెషన్ ముగిసింది"],["Nice work","बढ़िया काम","మంచి పని"]
 );
+/* ----- Phase 5b: the gaps the crawl (tests/crawl-i18n.mjs) found ----- */
+A(
+["Add free AI keys","मुफ़्त AI कुंजियाँ जोड़ें","ఉచిత AI కీలను జోడించండి"],
+["Also: new project NAME, new subject NAME, summarise TOPIC, compare A and B.","इनके अलावा (अंग्रेज़ी में लिखें): new project NAME, new subject NAME, summarise TOPIC, compare A and B.","ఇవి కూడా (ఇంగ్లీష్‌లో టైప్ చేయండి): new project NAME, new subject NAME, summarise TOPIC, compare A and B."],
+["Anthropic API key","Anthropic API कुंजी","Anthropic API కీ"],
+["Ask about your own notes, tasks, links and flashcards. Find works on this device, with no account and no key.","अपने नोट्स, कार्य, लिंक और फ़्लैशकार्ड के बारे में पूछें। ‘खोजें’ इसी डिवाइस पर चलता है, बिना खाते और बिना कुंजी के।","మీ నోట్స్, పనులు, లింక్‌లు, ఫ్లాష్‌కార్డ్‌ల గురించి అడగండి. ‘వెతకండి’ ఈ డివైస్‌లోనే పనిచేస్తుంది, ఖాతా గానీ కీ గానీ అవసరం లేదు."],
+["Ask Nexus can use free AI keys instead of a paid one. Add as many as you like. Nexus tries them in this order and moves to the next one when a limit is reached: Gemini, Groq, OpenRouter, Mistral, Cerebras. Keys stay in this browser only and are never put in the code. Your question and the matching notes go to whichever provider answers. Google may use free-tier content to improve its products, so skip Gemini if that matters to you.","Nexus से पूछें में पैसे वाली कुंजी की जगह मुफ़्त AI कुंजियाँ इस्तेमाल हो सकती हैं। जितनी चाहें जोड़ें। Nexus उन्हें इसी क्रम में आज़माता है और सीमा पूरी होने पर अगली पर चला जाता है: Gemini, Groq, OpenRouter, Mistral, Cerebras। कुंजियाँ सिर्फ़ इसी ब्राउज़र में रहती हैं और कोड में कभी नहीं डाली जातीं। आपका सवाल और मेल खाते नोट्स उसी प्रदाता को जाते हैं जो जवाब देता है। Google मुफ़्त स्तर की सामग्री का उपयोग अपने उत्पाद सुधारने में कर सकता है, इसलिए यह बात मायने रखती हो तो Gemini छोड़ दें।","Nexusని అడగండి చెల్లింపు కీ బదులు ఉచిత AI కీలను కూడా ఉపయోగించగలదు. మీకు కావలసినన్ని జోడించండి. Nexus వాటిని ఈ క్రమంలో ప్రయత్నిస్తుంది, పరిమితి చేరగానే తర్వాతి దానికి వెళ్తుంది: Gemini, Groq, OpenRouter, Mistral, Cerebras. కీలు ఈ బ్రౌజర్‌లో మాత్రమే ఉంటాయి, కోడ్‌లో ఎప్పుడూ పెట్టరు. మీ ప్రశ్న, సరిపోలే నోట్స్ సమాధానం ఇచ్చే ప్రొవైడర్‌కు వెళ్తాయి. Google ఉచిత స్థాయి కంటెంట్‌ను తన ఉత్పత్తులను మెరుగుపరచడానికి వాడవచ్చు, కాబట్టి అది ముఖ్యమైతే Gemini వదిలేయండి."],
+["Ask with AI","AI से पूछें","AI తో అడగండి"],
+["Attachments are not stored in restore points. Ones deleted within the last 30 days can still be brought back.","अटैचमेंट पुनर्स्थापना बिंदुओं में सहेजे नहीं जाते। पिछले 30 दिनों में हटाए गए अटैचमेंट अब भी वापस लाए जा सकते हैं।","అటాచ్‌మెంట్‌లు పునరుద్ధరణ పాయింట్లలో సేవ్ కావు. గత 30 రోజుల్లో తొలగించినవి ఇప్పటికీ తిరిగి తీసుకురావచ్చు."],
+["automatic","स्वचालित","ఆటోమేటిక్"],
+["Backup cancelled. Use at least 8 characters.","बैकअप रद्द किया गया। कम से कम 8 अक्षर रखें।","బ్యాకప్ రద్దయింది. కనీసం 8 అక్షరాలు వాడండి."],
+["Capture something","कुछ कैप्चर करें","ఏదైనా క్యాప్చర్ చేయండి"],
+["Choose a passphrase. You will type it every time Nexus locks, so make it something you can remember but others cannot guess.","पासफ़्रेज़ चुनें। Nexus जब भी लॉक होगा, आपको इसे टाइप करना होगा, इसलिए ऐसा चुनें जो आपको याद रहे पर दूसरे अनुमान न लगा सकें।","పాస్‌ఫ్రేజ్‌ను ఎంచుకోండి. Nexus లాక్ అయిన ప్రతిసారీ దీన్ని టైప్ చేయాలి, కాబట్టి మీకు గుర్తుండేలా, ఇతరులు ఊహించలేనిదిగా ఉంచండి."],
+["Command","कमांड","కమాండ్"],
+["Command center","कमांड सेंटर","కమాండ్ సెంటర్"],
+["Command palette","कमांड पैलेट","కమాండ్ పాలెట్"],
+["Drag a task onto the day, or tap it and then tap a time. On a phone, press and hold to drag.","किसी कार्य को दिन पर खींचें, या उस पर टैप करके फिर कोई समय चुनें। फ़ोन पर खींचने के लिए दबाए रखें।","పనిని రోజుపైకి లాగండి, లేదా దాన్ని తాకి, ఆపై ఒక సమయాన్ని తాకండి. ఫోన్‌లో లాగడానికి నొక్కి ఉంచండి."],
+["Everything for this day has a time, or there is nothing due.","इस दिन की हर चीज़ का समय तय है, या कुछ देय नहीं है।","ఈ రోజుకు అన్నింటికీ సమయం ఉంది, లేదా గడువు ఉన్నవి ఏవీ లేవు."],
+["Export failed. Try again.","एक्सपोर्ट नहीं हो सका। फिर कोशिश करें।","ఎక్స్‌పోర్ట్ విఫలమైంది. మళ్ళీ ప్రయత్నించండి."],
+["Find","खोजें","వెతకండి"],
+["Finished, last 7 days","पूरे हुए, पिछले 7 दिन","పూర్తయినవి, గత 7 రోజులు"],
+["Focus","फ़ोकस","ఫోకస్"],
+["Give it a name.","इसे कोई नाम दें।","దానికి పేరు పెట్టండి."],
+["Go to Home","होम पर जाएँ","హోమ్‌కు వెళ్ళండి"],
+["Go to Tasks","कार्य पर जाएँ","పనులకు వెళ్ళండి"],
+["Go to Library","लाइब्रेरी पर जाएँ","లైబ్రరీకి వెళ్ళండి"],
+["Go to Study","पढ़ाई पर जाएँ","చదువుకు వెళ్ళండి"],
+["Go to More","‘और’ टैब पर जाएँ","‘మరిన్ని’ ట్యాబ్‌కు వెళ్ళండి"],
+["Import takes Todoist (.csv), Google Keep (.json from Takeout), Evernote (.enex), and Obsidian or Notion (.md) files. A restore point is saved first.","इम्पोर्ट में Todoist (.csv), Google Keep (Takeout से .json), Evernote (.enex), और Obsidian या Notion (.md) फ़ाइलें चलती हैं। पहले एक पुनर्स्थापना बिंदु सहेजा जाता है।","ఇంపోర్ట్‌లో Todoist (.csv), Google Keep (Takeout నుండి .json), Evernote (.enex), Obsidian లేదా Notion (.md) ఫైళ్లు పనిచేస్తాయి. ముందుగా ఒక పునరుద్ధరణ పాయింట్ సేవ్ అవుతుంది."],
+["Jot something down without opening the whole app. A phone browser cannot draw over other apps, so Nexus offers a pinned notification and a home screen shortcut instead.","पूरा ऐप खोले बिना कुछ लिख लें। फ़ोन का ब्राउज़र दूसरे ऐप के ऊपर नहीं दिख सकता, इसलिए Nexus उसकी जगह पिन की हुई सूचना और होम स्क्रीन शॉर्टकट देता है।","పూర్తి యాప్ తెరవకుండానే ఏదైనా రాసుకోండి. ఫోన్ బ్రౌజర్ ఇతర యాప్‌ల పైన కనిపించలేదు, అందుకే Nexus బదులుగా పిన్ చేసిన నోటిఫికేషన్, హోమ్ స్క్రీన్ షార్ట్‌కట్ ఇస్తుంది."],
+["Leave empty to use the defaults. Nexus finds replacements on its own if a model is retired.","डिफ़ॉल्ट इस्तेमाल करने के लिए खाली छोड़ें। कोई मॉडल बंद हो जाए तो Nexus अपने आप बदलाव ढूँढ लेता है।","డిఫాల్ట్‌లు వాడటానికి ఖాళీగా ఉంచండి. ఏదైనా మోడల్ నిలిపివేస్తే Nexus స్వయంగా ప్రత్యామ్నాయాలను కనుగొంటుంది."],
+["Markdown export ready","Markdown एक्सपोर्ट तैयार है","Markdown ఎక్స్‌పోర్ట్ సిద్ధంగా ఉంది"],
+["Marked done","पूरा चिह्नित किया","పూర్తిగా గుర్తించారు"],
+["New study subject","नया अध्ययन विषय","కొత్త చదువు సబ్జెక్ట్"],
+["Next day","अगला दिन","తర్వాతి రోజు"],
+["Previous day","पिछला दिन","మునుపటి రోజు"],
+["No money? Add a free Gemini or Groq key in Settings instead, with no billing.","पैसे नहीं हैं? इसके बजाय सेटिंग्स में मुफ़्त Gemini या Groq कुंजी जोड़ें, कोई बिलिंग नहीं।","డబ్బు లేదా? బదులుగా సెట్టింగ్‌లలో ఉచిత Gemini లేదా Groq కీ జోడించండి, బిల్లింగ్ ఉండదు."],
+["Nothing due tomorrow.","कल कुछ देय नहीं है।","రేపు గడువు ఉన్నవి ఏవీ లేవు."],
+["of today's tasks","आज के कार्यों में से","ఈ రోజు పనుల్లో"],
+["Off. Turn it on to lock Nexus with a passphrase and encrypt everything stored on this device. Sync needs it on. A forgotten passphrase cannot be reset without your recovery key.","बंद है। पासफ़्रेज़ से Nexus को लॉक करने और इस डिवाइस पर रखी हर चीज़ को एन्क्रिप्ट करने के लिए इसे चालू करें। सिंक के लिए इसका चालू होना ज़रूरी है। भूला हुआ पासफ़्रेज़ आपकी रिकवरी कुंजी के बिना रीसेट नहीं हो सकता।","ఆఫ్‌లో ఉంది. పాస్‌ఫ్రేజ్‌తో Nexusను లాక్ చేయడానికి, ఈ డివైస్‌లో ఉన్నవన్నీ ఎన్‌క్రిప్ట్ చేయడానికి దీన్ని ఆన్ చేయండి. సింక్‌కు ఇది ఆన్‌లో ఉండాలి. మర్చిపోయిన పాస్‌ఫ్రేజ్‌ను మీ రికవరీ కీ లేకుండా రీసెట్ చేయలేరు."],
+["Or use your own Anthropic API key from console.anthropic.com. That is a developer account billed by usage, separate from a Claude subscription. Your question and the matching items are sent to Anthropic, and nothing is saved until you approve it.","या console.anthropic.com से अपनी Anthropic API कुंजी इस्तेमाल करें। यह डेवलपर खाता है जिसका बिल उपयोग के हिसाब से बनता है, और यह Claude सब्सक्रिप्शन से अलग है। आपका सवाल और मेल खाते आइटम Anthropic को भेजे जाते हैं, और आपकी मंज़ूरी तक कुछ भी सहेजा नहीं जाता।","లేదా console.anthropic.com నుండి మీ సొంత Anthropic API కీని వాడండి. ఇది వినియోగం ఆధారంగా బిల్ అయ్యే డెవలపర్ ఖాతా, Claude సబ్‌స్క్రిప్షన్‌కు వేరు. మీ ప్రశ్న, సరిపోలే అంశాలు Anthropicకు పంపబడతాయి, మీరు ఆమోదించే వరకు ఏదీ సేవ్ కాదు."],
+["Passphrase (8 or more characters)","पासफ़्रेज़ (8 या अधिक अक्षर)","పాస్‌ఫ్రేజ్ (8 లేదా అంతకంటే ఎక్కువ అక్షరాలు)"],
+["Passphrase to keep it encrypted on this device (8+ characters, optional)","इसे इस डिवाइस पर एन्क्रिप्टेड रखने के लिए पासफ़्रेज़ (8+ अक्षर, वैकल्पिक)","దీన్ని ఈ డివైస్‌లో ఎన్‌క్రిప్ట్ చేసి ఉంచడానికి పాస్‌ఫ్రేజ్ (8+ అక్షరాలు, ఐచ్ఛికం)"],
+["Plan","योजना","ప్లాన్"],
+["Your next 7 days","आपके अगले 7 दिन","మీ తదుపరి 7 రోజులు"],
+["Plan your day (time blocks)","अपना दिन प्लान करें (टाइम ब्लॉक)","మీ రోజును ప్లాన్ చేయండి (టైమ్ బ్లాక్‌లు)"],
+["Restoring replaces what you have now. Nexus saves a restore point of the current data first, so you can undo it.","पुनर्स्थापना से आपके मौजूदा डेटा की जगह यह आ जाता है। Nexus पहले मौजूदा डेटा का एक पुनर्स्थापना बिंदु सहेजता है, ताकि आप इसे पलट सकें।","పునరుద్ధరణ ప్రస్తుతం ఉన్నదాని స్థానంలో వస్తుంది. Nexus ముందుగా ప్రస్తుత డేటా యొక్క పునరుద్ధరణ పాయింట్‌ను సేవ్ చేస్తుంది, కాబట్టి మీరు దాన్ని రద్దు చేయవచ్చు."],
+["Run","चलाएँ","రన్ చేయి"],
+["Settings, backup, trash and restore points","सेटिंग्स, बैकअप, ट्रैश और पुनर्स्थापना बिंदु","సెట్టింగ్‌లు, బ్యాకప్, ట్రాష్, పునరుద్ధరణ పాయింట్లు"],
+["Smart tags and titles turned off.","स्मार्ट टैग और शीर्षक बंद किए गए।","స్మార్ట్ టాగ్‌లు, శీర్షికలు ఆఫ్ చేశారు."],
+["Something went wrong. Your data is safe on this device.","कुछ गड़बड़ हो गई। आपका डेटा इस डिवाइस पर सुरक्षित है।","ఏదో తప్పు జరిగింది. మీ డేటా ఈ డివైస్‌లో సురక్షితంగా ఉంది."],
+["Tag notes with","नोट्स को टैग करें:","ఈ టాగ్‌తో నోట్స్‌ను గుర్తించండి:"],
+["to use them here.","ताकि वे यहाँ दिखें।","అప్పుడు అవి ఇక్కడ కనిపిస్తాయి."],
+["Tasks finished per day","प्रतिदिन पूरे किए गए कार्य","రోజుకు పూర్తయిన పనులు"],
+["To place","रखने के लिए","ఉంచాల్సినవి"],
+["Type a command or search","कमांड टाइप करें या खोजें","కమాండ్ టైప్ చేయండి లేదా వెతకండి"],
+["Type a command, or tap one. You can also type these in the top bar.","कमांड टाइप करें, या किसी पर टैप करें। इन्हें ऊपर के बार में भी टाइप कर सकते हैं। कमांड अंग्रेज़ी में लिखे जाते हैं।","కమాండ్ టైప్ చేయండి, లేదా ఒకదాన్ని తాకండి. వీటిని పై బార్‌లో కూడా టైప్ చేయవచ్చు. కమాండ్‌లు ఇంగ్లీష్‌లో రాస్తారు."],
+["Type a question first.","पहले सवाल लिखें।","ముందు ప్రశ్న టైప్ చేయండి."],
+["Type it again","इसे फिर से टाइप करें","దీన్ని మళ్ళీ టైప్ చేయండి"],
+["Up and down to choose, Enter to run, Esc to close.","चुनने के लिए ऊपर-नीचे, चलाने के लिए Enter, बंद करने के लिए Esc।","ఎంచుకోవడానికి పైకి-కిందికి, రన్ చేయడానికి Enter, మూసివేయడానికి Esc."],
+["What do you want to do?","आप क्या करना चाहते हैं?","మీరు ఏమి చేయాలనుకుంటున్నారు?"],
+["Written answers with AI (optional)","AI से लिखित जवाब (वैकल्पिक)","AI తో రాతపూర్వక సమాధానాలు (ఐచ్ఛికం)"],
+["Your question","आपका सवाल","మీ ప్రశ్న"],
+["Your recap","आपका सारांश","మీ సారాంశం"],
+["Added task","कार्य जोड़ा","పని జోడించారు"],
+["added","जोड़ा गया","జోడించారు"]
+);
 window.NXI18N.add(W);
 /* patterns come next */
 
@@ -195,7 +262,7 @@ const P=[
   unit(/^due (.+)$/,"$1 तक देय","గడువు $1"),
   unit(/^from (.+)$/,"$1 से","$1 నుండి"),
   unit(/^overdue since (.+)$/,"$1 से बाकी","$1 నుండి గడువు దాటింది"),
-  unit(/^Added (.+), edited (.+)\.?$/,(m,t)=>"जोड़ा: "+t(m[1])+", संपादित: "+t(m[2]),(m,t)=>"జోడించింది: "+t(m[1])+", సవరించింది: "+t(m[2])),
+  unit(/^Added (.+), edited (.+?)\.?$/,(m,t)=>"जोड़ा: "+t(m[1])+", संपादित: "+t(m[2]),(m,t)=>"జోడించింది: "+t(m[1])+", సవరించింది: "+t(m[2])),
   unit(/^Today: (.+)$/,(m,t)=>"आज: "+t(m[1]),(m,t)=>"ఈ రోజు: "+t(m[1])),
   unit(/^This week: (.+)$/,(m,t)=>"इस सप्ताह: "+t(m[1]),(m,t)=>"ఈ వారం: "+t(m[1])),
   unit(/^Same project: (.+)$/,"वही प्रोजेक्ट: $1","అదే ప్రాజెక్ట్: $1"),
@@ -219,9 +286,22 @@ const joiner=(sep)=>m=>{
     const parts=s.split(d),tt=NXI18N.t,res=parts.map(x=>tt(x));
     const ok=parts.every((x,i)=>res[i]!==x||(!all&&i===0&&!/^(due|from|added|edited|today|tomorrow)\b/i.test(x)));
     const any=parts.some((x,i)=>res[i]!==x);
-    if(ok&&any)return res.join(L()==='hi'?out:(out==='। '?'. ':out))+tail;
+    if(ok&&any){const r=res.join(L()==='hi'?out:(out==='। '?'. ':out));return /[।.]$/.test(r)?r:r+tail}
   }
   return null};
+/* Phase 5b patterns */
+const TY={task:['कार्य','పని'],note:['नोट','నోట్'],idea:['आइडिया','ఐడియా'],link:['लिंक','లింక్'],file:['फ़ाइल','ఫైల్']};
+const tyw=(k,i)=>(TY[k]||[k,k])[i];
+P.push(
+  unit(/^(Added|Edited|Finished) (task|note|idea|link|file)$/,m=>tyw(m[2],0)+' '+({Added:'जोड़ा',Edited:'संपादित किया',Finished:'पूरा किया'})[m[1]],m=>tyw(m[2],1)+' '+({Added:'జోడించారు',Edited:'సవరించారు',Finished:'పూర్తి చేశారు'})[m[1]]),
+  unit(/^Focused (\d+) min on (task|note|idea|link|file)$/,m=>tyw(m[2],0)+' पर '+m[1]+' मिनट फ़ोकस किया',m=>tyw(m[2],1)+'పై '+m[1]+' నిమిషాలు ఫోకస్ చేశారు'),
+  unit(/^(\d+) percent of today's tasks done$/,"आज के कार्यों में से $1 प्रतिशत पूरे","ఈ రోజు పనుల్లో $1 శాతం పూర్తయ్యాయి"),
+  unit(/^(\d+) (?:flash)?cards? due for review(?: today)?\.?$/,m=>m[1]+' कार्ड दोहराने हैं।',m=>m[1]+' '+te1(m[1],'కార్డ్ రివ్యూకి ఉంది.','కార్డ్‌లు రివ్యూకి ఉన్నాయి.')),
+  unit(/^(\d+) left$/,"$1 बाकी","$1 మిగిలాయి"),
+  unit(/^(\d+) minutes? left$/,"$1 मिनट बाकी",m=>te1(m[1],m[1]+' నిమిషం మిగిలింది',m[1]+' నిమిషాలు మిగిలాయి')),
+  unit(/^Done \((\d+)\)$/,"पूरे हुए ($1)","పూర్తయినవి ($1)"),
+  unit(/^(.+) key,$/,"$1 कुंजी,","$1 కీ,")
+);
 P.push([/^.+(?: · |\. |, ).+$/,joiner(),joiner()]);
 NXI18N.add([],P);
 })();
